@@ -1,2 +1,24 @@
-{
-    }
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: admin
+    username: root
+    url: jdbc:mysql://localhost:3306/weather_trip
+
+  # mail trap credentials
+mail:
+  host: smtp.mailtrap.io
+  port: 2525
+  username: dbf51519c8c0f2
+  password: abcddb4ee26865
+
+weather-trip:
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        base64-secret: NjM1Y2E3OTlkZDQ5Yzc0ZGIxMmQ1ZWFkNDEzMmRjOTJlZDAzYWRjNGJkMjUwMTg1YjMyNDRmZGQ3N2FiYjgxZTA4YzE1NmJhNjdmZTFhMzg3ZTU3YThiMjJkZDY2YWI1NjllMmFhYzY1MDczMzQ2OTRjNzkxMmY1MzBjZmEzYTE=
+        # Token is valid 30 days
+        token-validity-in-seconds: 2592000
+        # Token is valid 6 months
+        token-validity-in-seconds-for-remember-me: 15780000
