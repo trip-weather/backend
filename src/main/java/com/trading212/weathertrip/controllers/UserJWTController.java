@@ -34,16 +34,19 @@ public class UserJWTController {
 
     @PostMapping("/authenticate")
     public ResponseEntity authorize(@Valid @RequestBody LoginUserValidation loginUser) throws MessagingException {
-        System.out.println("inside authenticate");
+        System.out.println(userRepository.findByUsername(loginUser.getUsername()));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginUser.getUsername(),
                 loginUser.getPassword()
         );
+        Authentication authentication = null;
+        try {
+            authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
-        System.out.println(authenticationToken.getAuthorities().isEmpty() ? "empty" : "full");
-        authenticationToken.getAuthorities().forEach(authority -> System.out.println(authority.getAuthority()));
-        System.out.println(authenticationToken.getName());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         if (authentication == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 

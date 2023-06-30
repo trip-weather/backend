@@ -1,5 +1,6 @@
 package com.trading212.weathertrip.services;
 
+import com.trading212.weathertrip.controllers.errors.UserNotFoundException;
 import com.trading212.weathertrip.domain.entities.Authority;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,19 +29,11 @@ public class ApplicationUserDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("load by username");
-
-        try {
-            System.out.println(userRepository.findByUsername(username).isEmpty() ? "empty user" : "full user");
-            System.out.println(userRepository.findByUsername(username).get().getAuthorities());
-        } catch (Exception exception) {
-            System.out.println("User not found!");
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("User with name " + username + "not found !");
         }
-
-        User user = userRepository.findByUsername(username).get();
-        user.setAuthorities(Set.of(userRoleRepository.findRoleUserUuid(user.getUuid()).get()));
-
-        return map(user);
+        return map(user.get());
 
 //        return userRepository.findByUsername(username)
 //                .map(this::map)
@@ -47,9 +41,6 @@ public class ApplicationUserDetails implements UserDetailsService {
     }
 
     private UserDetails map(User user) {
-        System.out.println(extractAuthorities(user).isEmpty() ? "empty authorities" : "full authorities");
-        extractAuthorities(user).forEach(authority -> System.out.println(authority.getAuthority()));
-
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
@@ -58,8 +49,6 @@ public class ApplicationUserDetails implements UserDetailsService {
     }
 
     private List<GrantedAuthority> extractAuthorities(User user) {
-
-        System.out.println(userRoleRepository.findRoleUserUuid(user.getUuid()));
         return user.getAuthorities()
                 .stream()
                 .map(this::mapRole)

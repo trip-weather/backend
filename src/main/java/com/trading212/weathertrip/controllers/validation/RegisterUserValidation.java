@@ -15,9 +15,12 @@ public class RegisterUserValidation {
     private String username;
 
     @Email
-    @Size(min = 5, max = 254)
+    @Size(min = 5, max = 100)
     private String email;
 
     @Size(min = Constants.PASSWORD_MIN_LENGTH, max = Constants.PASSWORD_MAX_LENGTH)
     private String password;
+
+    private String firstName;
+    private String lastName;
 }

@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .requestMatchers("/api/account/change-password").authenticated()
-                .requestMatchers("/api/authenticate", "/api/register").permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .httpBasic()
                 .and()

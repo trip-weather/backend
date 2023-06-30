@@ -25,7 +25,6 @@ public class JWTFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);
-        System.out.println("inside jwt filer");
 
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
@@ -33,8 +32,6 @@ public class JWTFilter extends GenericFilterBean {
             authentication.getAuthorities().forEach(System.out::println);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            System.out.println("inside if");
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

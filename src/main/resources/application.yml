@@ -5,12 +5,20 @@ spring:
     username: root
     url: jdbc:mysql://localhost:3306/weather_trip
 
+#  liquibase:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/weather_trip
+##    username: root
+#    password: admin
+#    change-log: liquibase/changelog/changelog-master.xml
+#
+
   # mail trap credentials
 mail:
   host: smtp.mailtrap.io
   port: 2525
-  username: dbf51519c8c0f2
-  password: abcddb4ee26865
+  username: 2c8718f6690af3
+  password: 7b3eb969b8f773
 
 weather-trip:
   security:
@@ -22,3 +30,5 @@ weather-trip:
         token-validity-in-seconds: 2592000
         # Token is valid 6 months
         token-validity-in-seconds-for-remember-me: 15780000
+
+

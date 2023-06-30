@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="createTable-users" author="your_name">
+        <createTable tableName="users">
+            <column name="uuid" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="firstName" type="VARCHAR(255)"/>
+            <column name="lastName" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activated" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reset_key" type="VARCHAR(255)"/>
+            <column name="activation_key" type="VARCHAR(255)"/>
+            <column name="reset_date" type="DATETIME"/>
+            <column name="created_date" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="createTable-userAuthority" author="your_name">
+        <createTable tableName="user_authority">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_uuid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="createTable-authority" author="your_name">
+        <createTable tableName="authority">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addPrimaryKey-userAuthority" author="your_name">
+        <addPrimaryKey columnNames="id" tableName="user_authority"/>
+    </changeSet>
+
+    <changeSet id="addForeignKeyConstraint-userAuthority" author="your_name">
+        <addForeignKeyConstraint baseTableName="user_authority"
+                                 baseColumnNames="user_uuid"
+                                 referencedTableName="users"
+                                 referencedColumnNames="uuid"
+                                 constraintName="FK_user_authority_users"/>
+    </changeSet>
+
+    <changeSet id="addAutoIncrement-userAuthority" author="your_name">
+        <addColumn tableName="user_authority">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <modifyDataType tableName="user_authority" columnName="id" newDataType="INT AUTO_INCREMENT"/>
+    </changeSet>
+
+    <changeSet id="insertData-authority" author="your_name">
+        <insert tableName="authority">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="authority">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
