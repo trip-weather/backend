@@ -1,14 +1,11 @@
 package com.trading212.weathertrip.services;
 
 
-import ch.qos.logback.core.testUtil.RandomUtil;
 import com.trading212.weathertrip.controllers.errors.EmailAlreadyUsedException;
 import com.trading212.weathertrip.controllers.errors.InvalidPasswordException;
-import com.trading212.weathertrip.controllers.errors.UserNotFoundException;
 import com.trading212.weathertrip.controllers.errors.UsernameAlreadyUsedException;
 import com.trading212.weathertrip.controllers.validation.ChangePasswordValidation;
 import com.trading212.weathertrip.controllers.validation.RegisterUserValidation;
-import com.trading212.weathertrip.domain.dto.UserDTO;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +13,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -100,7 +94,6 @@ public class UserService {
                     userRepository.resetPassword(user);
                     return user;
                 });
-
     }
 
     public Optional<User> activateAccount(String key) {

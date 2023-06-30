@@ -4,7 +4,6 @@ import com.trading212.weathertrip.controllers.errors.UserNotFoundException;
 import com.trading212.weathertrip.domain.entities.Authority;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.UserRepository;
-import com.trading212.weathertrip.repositories.UserRoleRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,17 +13,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class ApplicationUserDetails implements UserDetailsService {
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
 
-    public ApplicationUserDetails(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public ApplicationUserDetails(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
     }
 
     @Override

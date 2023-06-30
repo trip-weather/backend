@@ -1,6 +1,5 @@
 package com.trading212.weathertrip.services;
 
-import com.trading212.weathertrip.domain.dto.UserDTO;
 import com.trading212.weathertrip.domain.entities.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -25,9 +24,7 @@ public class MailService {
     }
 
     public void sendEmail(String to, String content, boolean isMultipart, boolean isHtml, String subject) {
-
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
 
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
@@ -43,11 +40,9 @@ public class MailService {
         } catch (MessagingException e) {
             log.warn("Email could not be sent to user '{}'", to, e);
         }
-
     }
 
     public void sendActivationEmail(User user){
-
         log.info("Sending activation mail to {}", user.getEmail());
 
         Context context = new Context();
@@ -56,7 +51,6 @@ public class MailService {
         String content = templateEngine.process("mail/activationEmail", context);
 
         sendEmail(user.getEmail(), content, false, true, "Потвърждение на имейл");
-
     }
 
     public void sendPasswordResetMail(User user) {
@@ -67,6 +61,5 @@ public class MailService {
         context.setVariable("request", "http://localhost:8080/api/account/reset-password/finish");
         String content = templateEngine.process("mail/passwordResetEmail", context);
         sendEmail(user.getEmail(), content, false, true, "Забравена парола");
-
     }
 }

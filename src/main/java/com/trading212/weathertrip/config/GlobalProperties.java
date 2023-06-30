@@ -18,16 +18,9 @@ public class GlobalProperties {
 
         private String contentSecurityPolicy = DefaultGlobalProperties.Security.contentSecurityPolicy;
 
-        private final ClientAuthorization clientAuthorization = new ClientAuthorization();
-
         private final Authentication authentication = new Authentication();
 
         private final RememberMe rememberMe = new RememberMe();
-
-
-        public ClientAuthorization getClientAuthorization() {
-            return clientAuthorization;
-        }
 
         public Authentication getAuthentication() {
             return authentication;
@@ -43,49 +36,6 @@ public class GlobalProperties {
 
         public void setContentSecurityPolicy(String contentSecurityPolicy) {
             this.contentSecurityPolicy = contentSecurityPolicy;
-        }
-
-        public static class ClientAuthorization {
-
-            private String accessTokenUri = DefaultGlobalProperties.Security.ClientAuthorization.accessTokenUri;
-
-            private String tokenServiceId = DefaultGlobalProperties.Security.ClientAuthorization.tokenServiceId;
-
-            private String clientId = DefaultGlobalProperties.Security.ClientAuthorization.clientId;
-
-            private String clientSecret = DefaultGlobalProperties.Security.ClientAuthorization.clientSecret;
-
-            public String getAccessTokenUri() {
-                return accessTokenUri;
-            }
-
-            public void setAccessTokenUri(String accessTokenUri) {
-                this.accessTokenUri = accessTokenUri;
-            }
-
-            public String getTokenServiceId() {
-                return tokenServiceId;
-            }
-
-            public void setTokenServiceId(String tokenServiceId) {
-                this.tokenServiceId = tokenServiceId;
-            }
-
-            public String getClientId() {
-                return clientId;
-            }
-
-            public void setClientId(String clientId) {
-                this.clientId = clientId;
-            }
-
-            public String getClientSecret() {
-                return clientSecret;
-            }
-
-            public void setClientSecret(String clientSecret) {
-                this.clientSecret = clientSecret;
-            }
         }
 
         public static class Authentication {

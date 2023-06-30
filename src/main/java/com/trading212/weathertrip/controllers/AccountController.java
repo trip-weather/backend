@@ -2,7 +2,6 @@ package com.trading212.weathertrip.controllers;
 
 import com.trading212.weathertrip.controllers.errors.UserNotFoundException;
 import com.trading212.weathertrip.controllers.validation.*;
-import com.trading212.weathertrip.domain.dto.UserDTO;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.services.MailService;
 import com.trading212.weathertrip.services.UserService;
@@ -56,7 +55,7 @@ public class AccountController {
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
         } else {
-            throw new UserNotFoundException("User with email : " + user.get().getEmail() + " not found!");
+            throw new UserNotFoundException("User with email : " + validation.getEmail() + " not found!");
         }
     }
 

@@ -2,11 +2,8 @@ package com.trading212.weathertrip.controllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trading212.weathertrip.controllers.validation.LoginUserValidation;
-import com.trading212.weathertrip.repositories.UserRepository;
-import com.trading212.weathertrip.services.MailService;
 import com.trading212.weathertrip.security.JWTFilter;
 import com.trading212.weathertrip.security.TokenProvider;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,13 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserJWTController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
-    private final UserRepository userRepository;
-
-    private final MailService mailService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity authorize(@Valid @RequestBody LoginUserValidation loginUser) throws MessagingException {
-        System.out.println(userRepository.findByUsername(loginUser.getUsername()));
+    public ResponseEntity authorize(@Valid @RequestBody LoginUserValidation loginUser) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginUser.getUsername(),
                 loginUser.getPassword()
@@ -42,8 +34,7 @@ public class UserJWTController {
         Authentication authentication = null;
         try {
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
