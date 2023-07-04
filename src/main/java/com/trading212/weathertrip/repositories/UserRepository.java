@@ -1,7 +1,5 @@
 package com.trading212.weathertrip.repositories;
 
-import com.trading212.weathertrip.controllers.validation.RegisterUserValidation;
-import com.trading212.weathertrip.domain.dto.UserDTO;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.services.mapper.DetailedUserRowMapper;
 import com.trading212.weathertrip.services.mapper.UserRowMapper;
@@ -16,7 +14,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,7 +42,6 @@ public class UserRepository {
                                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
 
-
                 ps.setString(1, uuid);
                 ps.setString(2, user.getUsername());
                 ps.setString(3, user.getEmail());
@@ -54,7 +50,7 @@ public class UserRepository {
                 ps.setString(6, user.getPassword());
                 ps.setBoolean(7, user.isActivated());
                 ps.setString(8, user.getActivationKey());
-                ps.setTimestamp(9, Timestamp.from(Instant.from(user.getCreatedDate())));
+                ps.setTimestamp(9, Timestamp.valueOf(user.getCreatedDate()));
 
                 return ps;
             }, keyHolder);
@@ -79,7 +75,7 @@ public class UserRepository {
     public Optional<User> findByUsername(String username) {
         String query = """
                 SELECT uuid, username, email, password, firstName, lastName, activated
-                from users 
+                from users
                 where username = ?
                 """;
 
@@ -93,7 +89,7 @@ public class UserRepository {
     public Optional<User> findByUsernameDetailedInfo(String username) {
         String query = """
                 SELECT uuid, username, email, password, firstName, lastName, activated, reset_key, reset_date
-                from users 
+                from users
                 where username = ?
                 """;
 
@@ -110,9 +106,10 @@ public class UserRepository {
     }
 
     public void updateResetKeyAndDate(User user) {
-        String query = "UPDATE users \n" +
-                "SET reset_date = ?,  reset_key = ?\n" +
-                "WHERE email = ?";
+        String query = """
+                UPDATE users\s
+                SET reset_date = ?,  reset_key = ?
+                WHERE email = ?""";
 
         jdbcTemplate.update(query, user.getResetDate(), user.getResetKey(), user.getEmail());
     }
@@ -130,9 +127,10 @@ public class UserRepository {
     }
 
     public void resetPassword(User user) {
-        String query = "UPDATE users\n" +
-                "SET password = ?, reset_key = ?, reset_date = ?\n" +
-                "WHERE email = ?";
+        String query = """
+                UPDATE users
+                SET password = ?, reset_key = ?, reset_date = ?
+                WHERE email = ?""";
 
         jdbcTemplate.update(query, user.getPassword(), user.getResetKey(), user.getResetDate(), user.getEmail());
     }
@@ -155,5 +153,19 @@ public class UserRepository {
                 "WHERE uuid = ?";
 
         jdbcTemplate.update(query, user.isActivated(), user.getActivationKey(), user.getUuid());
+    }
+
+    public Optional<User> findByUsernameOrEmail(String username) {
+        String query = """
+                SELECT uuid, username, email, password, firstName, lastName, activated
+                from users
+                where username = ? or email = ?;
+                """;
+
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(query, rowMapper, username, username));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 }

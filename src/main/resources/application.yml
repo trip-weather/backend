@@ -30,5 +30,15 @@ weather-trip:
         token-validity-in-seconds: 2592000
         # Token is valid 6 months
         token-validity-in-seconds-for-remember-me: 15780000
+  cors:
+    # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
+    allowed-origins: 'http://localhost:3001 ,http://127.0.0.1:3001, http://localhost:3000 ,http://127.0.0.1:3000'
+    # Enable CORS when running in GitHub Codespaces
+    allowed-origin-patterns: 'https://*.githubpreview.dev'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: "Authorization,Link,X-Total-Count,X-weatherTrip-alert,X-weatherTrip-error,X-weatherTrip-params"
+    allow-credentials: true
+    max-age: 1800
 
 

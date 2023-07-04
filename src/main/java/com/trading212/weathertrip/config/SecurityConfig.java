@@ -1,7 +1,6 @@
 package com.trading212.weathertrip.config;
 
-import com.trading212.weathertrip.domain.entities.Authority;
-import com.trading212.weathertrip.domain.enums.UserRole;
+import com.trading212.weathertrip.security.CustomAuthenticationFilter;
 import com.trading212.weathertrip.security.JWTConfigurer;
 import com.trading212.weathertrip.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.CorsFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -20,6 +20,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
     private final GlobalProperties globalProperties;
     private final TokenProvider tokenProvider;
+    private final CorsFilter corsFilter;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -30,10 +31,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()
-//                .addFilterBefore(corsFilter, CustomAuthenticationFilter.class)
+                .addFilterBefore(corsFilter, CustomAuthenticationFilter.class)
 ////                .addFilter(new CustomAuthenticationFilter())
                 .exceptionHandling()
-//                .authenticationEntryPoint(problemSupport)
 //                .accessDeniedHandler(problemSupport)
                 .and()
                 .headers()

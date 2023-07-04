@@ -26,18 +26,12 @@ public class UserJWTController {
     private final TokenProvider tokenProvider;
 
     @PostMapping("/authenticate")
-    public ResponseEntity authorize(@Valid @RequestBody LoginUserValidation loginUser) {
+    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginUserValidation loginUser) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginUser.getUsername(),
                 loginUser.getPassword()
         );
-        Authentication authentication = null;
-        try {
-            authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         if (authentication == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 

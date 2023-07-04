@@ -31,6 +31,9 @@ public class UserService {
     }
 
     public User registerUser(RegisterUserValidation validation) {
+        if (!validation.getPassword().equals(validation.getRepeatedPassword())){
+            throw new InvalidPasswordException("Passwords must be same!");
+        }
         if (this.userRepository.findByEmail(validation.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException("Email is already used!");
         }

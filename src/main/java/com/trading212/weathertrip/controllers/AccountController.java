@@ -26,13 +26,12 @@ public class AccountController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody RegisterUserValidation validation) {
+    public void register(@RequestBody @Valid RegisterUserValidation validation) {
         User registerUser = userService.registerUser(validation);
         log.info("Register new user: {} ", registerUser);
 
         mailService.sendActivationEmail(registerUser);
     }
-
 
     @PostMapping("/account/activate")
     public void activate(@RequestParam(value = "key") String key) {

@@ -2,9 +2,6 @@ package com.trading212.weathertrip.domain.entities;
 
 import lombok.Builder;
 import lombok.Data;
-
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -22,6 +19,8 @@ public class User {
     private String lastName;
 
     private String password;
+
+    private String repeatedPassword;
 
     private boolean activated;
 

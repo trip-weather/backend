@@ -3,16 +3,19 @@ package com.trading212.weathertrip.config;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Component
 @ConfigurationProperties(prefix = "weather-trip")
 public class GlobalProperties {
 
     private final Security security = new Security();
+    private final CorsConfiguration cors = new CorsConfiguration();
 
     public Security getSecurity() {
         return security;
     }
+    public CorsConfiguration getCors() { return cors; }
 
     public static class Security {
 
@@ -105,7 +108,5 @@ public class GlobalProperties {
                 this.key = key;
             }
         }
-
     }
-
 }
