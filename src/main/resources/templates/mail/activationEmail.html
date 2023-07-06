@@ -1,13 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Регистрация</title>
+    <meta charset="utf-8">
+    <title>Account Activation</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<div style="display: flex; justify-content: center; margin-top: 1.6rem; margin-bottom: 3.5rem">
-    <a th:href="${request}"> Завърши профила си</a>
-
+<div class="container">
+    <div class="center">
+        <img src="https://example.com/logo.png" alt="Logo" style="max-width: 200px; margin-bottom: 20px;">
+    </div>
+    <h1>Welcome to WeatherTrip</h1>
+    <p>Thank you for signing up. To activate your account, please click the button below:</p>
+    <div class="center">
+        <a th:href="${request}" class="button">Activate Account</a>
+    </div>
+    <p>Thank you!</p>
 </div>
 </body>
 </html>
+
+
