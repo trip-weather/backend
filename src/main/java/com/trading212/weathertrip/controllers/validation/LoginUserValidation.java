@@ -16,5 +16,5 @@ public class LoginUserValidation {
     @Size(min = 4, max = 50)
     private String password;
 
-    private boolean rememberMe;
+    private boolean remember;
 }
