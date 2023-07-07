@@ -17,6 +17,8 @@ import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.trading212.weathertrip.repositories.UserRepository.Queries.*;
+
 @Repository
 public class UserRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -38,8 +40,7 @@ public class UserRepository {
             jdbcTemplate.update(conn -> {
 
                 PreparedStatement ps = conn.prepareStatement(
-                        "INSERT INTO users (uuid, username, email, firstName, lastName, password, activated, activation_key, created_date ) " +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        INSERT_INTO_USERS,
                         Statement.RETURN_GENERATED_KEYS);
 
                 ps.setString(1, uuid);
@@ -55,17 +56,14 @@ public class UserRepository {
                 return ps;
             }, keyHolder);
 
-            jdbcTemplate.update("INSERT INTO user_authority(authority_name, user_uuid) VALUES (?, ?)", "ROLE_USER", uuid);
+            jdbcTemplate.update(INSERT_INTO_USER_AUTHORITY, "ROLE_USER", uuid);
             return user;
         });
     }
 
     public Optional<User> findByEmail(String email) {
-        String query = "SELECT uuid, username, email, password, firstName, lastName, activated, reset_key, reset_date" +
-                " FROM users as u WHERE u.email = ?";
-
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(query, rowMapper, email));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_EMAIL, rowMapper, email));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -73,14 +71,8 @@ public class UserRepository {
     }
 
     public Optional<User> findByUsername(String username) {
-        String query = """
-                SELECT uuid, username, email, password, firstName, lastName, activated
-                from users
-                where username = ?
-                """;
-
         try {
-            return Optional.of(jdbcTemplate.queryForObject(query, rowMapper, username));
+            return Optional.of(jdbcTemplate.queryForObject(FIND_BY_USERNAME, rowMapper, username));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -101,71 +93,80 @@ public class UserRepository {
     }
 
     public void updatePassword(String uuid, String encryptedPassword) {
-        String query = "UPDATE users SET password = ? WHERE uuid = ?";
-        jdbcTemplate.update(query, encryptedPassword, uuid);
+        jdbcTemplate.update(UPDATE_PASSWORD, encryptedPassword, uuid);
     }
 
     public void updateResetKeyAndDate(User user) {
-        String query = """
-                UPDATE users\s
-                SET reset_date = ?,  reset_key = ?
-                WHERE email = ?""";
-
-        jdbcTemplate.update(query, user.getResetDate(), user.getResetKey(), user.getEmail());
+        jdbcTemplate.update(UPDATE_RESET_KEY_AND_DATE, user.getResetDate(), user.getResetKey(), user.getEmail());
     }
 
     public Optional<User> findByResetKey(String key) {
-        String query = "SELECT uuid, username, email, password, firstName, lastName, activated, reset_key, reset_date " +
-                "from users " +
-                "where reset_key = ?";
-
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(query, detailedRowMapper, key));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_RESET_KEY, detailedRowMapper, key));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
 
     public void resetPassword(User user) {
-        String query = """
-                UPDATE users
-                SET password = ?, reset_key = ?, reset_date = ?
-                WHERE email = ?""";
-
-        jdbcTemplate.update(query, user.getPassword(), user.getResetKey(), user.getResetDate(), user.getEmail());
+        jdbcTemplate.update(RESET_USER_PASSWORD, user.getPassword(), user.getResetKey(), user.getResetDate(), user.getEmail());
     }
 
     public Optional<User> findByActivationKey(String key) {
-        String query = "SELECT uuid, username, email, password, firstName, lastName, activated, reset_key, reset_date " +
-                "from users " +
-                "where activation_key = ?";
-
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(query, detailedRowMapper, key));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Queries.FIND_BY_ACTIVATION_KEY, detailedRowMapper, key));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
 
     public void saveUpdateActivation(User user) {
-        String query = "UPDATE users\n" +
-                "SET activated = ?, activation_key = ? \n" +
-                "WHERE uuid = ?";
-
-        jdbcTemplate.update(query, user.isActivated(), user.getActivationKey(), user.getUuid());
+        jdbcTemplate.update(UPDATE_USER_ACTIVATION, user.isActivated(), user.getActivationKey(), user.getUuid());
     }
 
     public Optional<User> findByUsernameOrEmail(String username) {
-        String query = """
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(FIND_BY_USERNAME_OR_EMAIL, rowMapper, username, username));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    static class Queries{
+        public static final String INSERT_INTO_USER_AUTHORITY = "INSERT INTO user_authority(authority_name, user_uuid) VALUES (?, ?)";
+        public static final String INSERT_INTO_USERS = "INSERT INTO users (uuid, username, email, firstName, lastName, password, activated, activation_key, created_date ) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        public static final  String FIND_BY_EMAIL = "SELECT uuid, username, email, password, firstName, lastName, activated, reset_key, reset_date" +
+                " FROM users as u WHERE u.email = ?";
+        public static final String FIND_BY_USERNAME =  """
+                SELECT uuid, username, email, password, firstName, lastName, activated
+                from users
+                where username = ?
+                """;
+        public static final String UPDATE_PASSWORD = "UPDATE users SET password = ? WHERE uuid = ?";
+        public static final String UPDATE_RESET_KEY_AND_DATE = """
+                UPDATE users\s
+                SET reset_date = ?,  reset_key = ?
+                WHERE email = ?""";
+        public static final String FIND_BY_RESET_KEY = "SELECT uuid, username, email, password, firstName, lastName, activated, reset_key, reset_date " +
+                "from users " +
+                "where reset_key = ?";
+        public static final String RESET_USER_PASSWORD = """
+                UPDATE users
+                SET password = ?, reset_key = ?, reset_date = ?
+                WHERE email = ?""";
+         public static  final String FIND_BY_ACTIVATION_KEY = "SELECT uuid, username, email, password," +
+                " firstName, lastName, activated, reset_key, reset_date " +
+                "from users " +
+                "where activation_key = ?";
+        public static  final String UPDATE_USER_ACTIVATION = "UPDATE users\n" +
+                "SET activated = ?, activation_key = ? \n" +
+                "WHERE uuid = ?";
+        public static final String FIND_BY_USERNAME_OR_EMAIL = """
                 SELECT uuid, username, email, password, firstName, lastName, activated
                 from users
                 where username = ? or email = ?;
                 """;
-
-        try {
-            return Optional.of(jdbcTemplate.queryForObject(query, rowMapper, username, username));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
     }
 }

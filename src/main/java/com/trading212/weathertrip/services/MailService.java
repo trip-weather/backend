@@ -57,8 +57,8 @@ public class MailService {
         log.info("Sending password reset mail to {}", user.getEmail());
 
         Context context = new Context();
-        context.setVariable("user", user);
-        context.setVariable("request", "http://localhost:8080/api/account/reset-password/finish");
+        context.setVariable("resetKey", user.getResetKey());
+        context.setVariable("baseUrl", "http://localhost:3000");
         String content = templateEngine.process("mail/passwordResetEmail", context);
         sendEmail(user.getEmail(), content, false, true, "Забравена парола");
     }
