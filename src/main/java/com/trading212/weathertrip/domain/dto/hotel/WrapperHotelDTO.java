@@ -6,11 +6,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @RequiredArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WrapperHotelDTO {
     @JsonProperty
-    private HotelResultDTO[] results;
+    private List<HotelResultDTO> results;
+
+    public WrapperHotelDTO(List<HotelResultDTO> results) {
+        this.results = results;
+    }
 }

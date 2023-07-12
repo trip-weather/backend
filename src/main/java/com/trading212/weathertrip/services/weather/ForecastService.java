@@ -3,12 +3,14 @@ package com.trading212.weathertrip.services.weather;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trading212.weathertrip.domain.constants.Constants;
 import com.trading212.weathertrip.domain.dto.weather.ForecastDataDTO;
 import com.trading212.weathertrip.domain.dto.weather.WrapperForecastDTO;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.trading212.weathertrip.domain.constants.Constants.*;
 
@@ -23,13 +25,26 @@ public class ForecastService {
         this.weatherLocationService = weatherLocationService;
     }
 
-    public ForecastDataDTO getDailyForecastForPlace(String city) throws JsonProcessingException {
+    public ForecastDataDTO getForecastForPlace(String city) throws JsonProcessingException {
+        return getForecast(city);
+    }
+
+    public List<ForecastDataDTO> getForecastForAllCities() throws JsonProcessingException {
+        ArrayList<ForecastDataDTO> result = new ArrayList<>();
+
+        for (String city : GET_CITIES) {
+            result.add(getForecast(city));
+        }
+        return result;
+    }
+
+    private ForecastDataDTO getForecast(String city) throws JsonProcessingException {
         String place_id = weatherLocationService.findLocation(city);
-        String url = Constants.FORECAST_URL + place_id;
+        String url = FORECAST_URL + place_id;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(RAPID_API_KEY, WEATHER_API_KEY );
+        headers.set(RAPID_API_KEY, WEATHER_API_KEY);
         headers.set(RAPID_API_HOST, WEATHER_API_HOST);
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 
@@ -39,7 +54,6 @@ public class ForecastService {
         ObjectMapper objectMapper = new ObjectMapper();
         WrapperForecastDTO forecasts = objectMapper.readValue(body, new TypeReference<WrapperForecastDTO>() {
         });
-
         return forecasts.getDaily();
     }
 }
