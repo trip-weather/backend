@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static com.trading212.weathertrip.domain.constants.Constants.*;
+import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 
 @Service
 public class WeatherLocationService {

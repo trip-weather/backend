@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 import static com.trading212.weathertrip.domain.constants.Constants.*;
 
 @Service
