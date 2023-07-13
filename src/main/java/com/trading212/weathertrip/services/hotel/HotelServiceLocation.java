@@ -3,11 +3,12 @@ package com.trading212.weathertrip.services.hotel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trading212.weathertrip.domain.constants.Constants;
 import com.trading212.weathertrip.domain.dto.hotel.HotelLocationDTO;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 
 
 @Service
@@ -19,11 +20,11 @@ public class HotelServiceLocation {
     }
 
     public String findDestinationId(String city) throws JsonProcessingException {
-        String url = Constants.BOOKING_LOCATION_URL + city;
+        String url = BOOKING_LOCATION_URL + city;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(Constants.RAPID_API_KEY, Constants.BOOKING_API_KEY);
-        headers.set(Constants.RAPID_API_HOST, Constants.BOOKING_API_HOST);
+        headers.set(RAPID_API_KEY, BOOKING_API_KEY);
+        headers.set(RAPID_API_HOST, BOOKING_API_HOST);
 
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 

@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 import static com.trading212.weathertrip.domain.constants.Constants.*;
 
 @Service

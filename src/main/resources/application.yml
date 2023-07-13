@@ -5,8 +5,10 @@ spring:
     username: root
     url: jdbc:mysql://localhost:3306/weather_trip
 
-
   # mail trap credentials
+  mvc:
+    converters:
+      preferred-json-mapper: gson
 mail:
   host: smtp.mailtrap.io
   port: 2525
