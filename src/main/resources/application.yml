@@ -26,8 +26,7 @@ weather-trip:
         # Token is valid 6 months
         token-validity-in-seconds-for-remember-me: 15780000
   cors:
-    # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
-    allowed-origins: 'http://localhost:3001 ,http://127.0.0.1:3001, http://localhost:3000 ,http://127.0.0.1:3000'
+    allowed-origins: 'http://localhost:3001 ,http://127.0.0.1:3001, http://localhost:3000 ,http://127.0.0.1:3000, http://192.168.1.199:3000, http://10.16.6.33:3000, http:/172.20.10.2:3000'
     # Enable CORS when running in GitHub Codespaces
     allowed-origin-patterns: 'https://*.githubpreview.dev'
     allowed-methods: '*'

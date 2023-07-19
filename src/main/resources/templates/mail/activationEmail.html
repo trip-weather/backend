@@ -59,7 +59,8 @@
     <h1>Welcome to WeatherTrip</h1>
     <p>Thank you for signing up. To activate your account, please click the button below:</p>
     <div class="center">
-        <a th:href="${request}" class="button">Activate Account</a>
+        <a th:method="post"
+           th:href="${request}" class="button">Activate Account</a>
     </div>
     <p>Thank you!</p>
 </div>

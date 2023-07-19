@@ -1,6 +1,5 @@
 package com.trading212.weathertrip.domain.dto.flight;
 
-import jakarta.persistence.GeneratedValue;
 import lombok.Getter;
 import lombok.Setter;
 

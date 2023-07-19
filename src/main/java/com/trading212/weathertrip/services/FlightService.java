@@ -24,6 +24,5 @@ public class FlightService {
                 validation.getReturnDate());
 
         return modelMapper.map(amadeusFlightOffer, FlightOfferDTO[].class);
-
     }
 }

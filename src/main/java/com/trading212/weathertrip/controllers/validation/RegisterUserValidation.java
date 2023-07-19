@@ -28,7 +28,7 @@ public class RegisterUserValidation {
     private String repeatedPassword;
 
     @NotBlank
-    @Size(min = Constants.FIRSTNAME_MIN_SIZE, message = "Last name length must be greater than 3.")
+    @Size(min = Constants.FIRSTNAME_MIN_SIZE, message = "First name length must be greater than 3.")
     private String firstName;
 
     @NotBlank

@@ -14,9 +14,11 @@ import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 @Service
 public class HotelServiceLocation {
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
-    public HotelServiceLocation(RestTemplate restTemplate) {
+    public HotelServiceLocation(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
 
     public String findDestinationId(String city) throws JsonProcessingException {
@@ -31,9 +33,8 @@ public class HotelServiceLocation {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
         String body = response.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
         HotelLocationDTO[] locations = objectMapper.readValue(body, new TypeReference<HotelLocationDTO[]>() {
         });
-        return locations[0].getDest_id();
+        return locations[0].getDestId();
     }
 }

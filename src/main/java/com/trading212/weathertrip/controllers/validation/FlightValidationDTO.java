@@ -19,5 +19,6 @@ public class FlightValidationDTO {
     @NotEmpty
     private String adults;
 
+    @NotEmpty
     private String returnDate;
 }

@@ -1,5 +1,6 @@
 package com.trading212.weathertrip.services;
 
+import com.trading212.weathertrip.controllers.errors.InvalidUserException;
 import com.trading212.weathertrip.domain.entities.Authority;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.UserRepository;
@@ -23,9 +24,14 @@ public class ApplicationUserDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsernameOrEmail(username)
-                .map(this::map)
-                .orElseThrow(() -> new UsernameNotFoundException("User with name " + username + " not found !"));
+
+        User user = userRepository.findByUsernameOrEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with name " + username + " not found!"));
+
+        if (!user.isActivated()) {
+            throw new InvalidUserException("User " + username + " was not activated");
+        }
+        return this.map(user);
     }
 
     private UserDetails map(User user) {

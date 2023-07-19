@@ -20,6 +20,7 @@ public class UserRowMapper implements RowMapper<User> {
                 .username(resultSet.getString("username"))
                 .firstName(resultSet.getString("firstName"))
                 .lastName(resultSet.getString("lastName"))
+                .activated(resultSet.getBoolean("activated"))
                 .authorities(Set.of(new Authority(1L, "ROLE_USER")))
                 .build();
     }

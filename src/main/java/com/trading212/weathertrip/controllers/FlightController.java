@@ -1,7 +1,6 @@
 package com.trading212.weathertrip.controllers;
 
 import com.amadeus.exceptions.ResponseException;
-import com.amadeus.resources.FlightOfferSearch;
 import com.amadeus.resources.Location;
 import com.trading212.weathertrip.controllers.validation.FlightValidationDTO;
 import com.trading212.weathertrip.domain.dto.flight.FlightOfferDTO;
