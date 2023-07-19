@@ -47,7 +47,7 @@ public class MailService {
 
         Context context = new Context();
         context.setVariable("user", user);
-        context.setVariable("request", "http://localhost:8080/api/account/activate/?key=" + user.getActivationKey());
+        context.setVariable("request", "http://localhost:3000/activate?key=" + user.getActivationKey());
         String content = templateEngine.process("mail/activationEmail", context);
 
         sendEmail(user.getEmail(), content, false, true, "Потвърждение на имейл");

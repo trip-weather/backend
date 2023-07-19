@@ -1,6 +1,8 @@
 package com.trading212.weathertrip.security;
 
 import com.trading212.weathertrip.config.GlobalProperties;
+import com.trading212.weathertrip.repositories.UserRepository;
+import com.trading212.weathertrip.services.ApplicationUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -23,10 +27,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
-
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String UUID = "uuid";
 
     private final Key key;
 
@@ -35,8 +39,10 @@ public class TokenProvider {
     private final long tokenValidityInMilliseconds;
 
     private final long tokenValidityInMillisecondsForRememberMe;
+    private final UserRepository userRepository;
 
-    public TokenProvider(GlobalProperties globalProperties) {
+    public TokenProvider(GlobalProperties globalProperties, UserRepository userRepository) {
+        this.userRepository = userRepository;
         byte[] keyBytes;
         String secret = globalProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
         if (!ObjectUtils.isEmpty(secret)) {
@@ -60,6 +66,12 @@ public class TokenProvider {
     public String createToken(Authentication authentication, boolean rememberMe) {
         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        com.trading212.weathertrip.domain.entities.User user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         long now = (new Date()).getTime();
         Date validity;
         if (rememberMe) {
@@ -72,6 +84,7 @@ public class TokenProvider {
                 .builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim(UUID, user.getUuid())
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();

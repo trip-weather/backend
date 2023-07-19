@@ -2,12 +2,15 @@ package com.trading212.weathertrip.controllers;
 
 import com.trading212.weathertrip.controllers.errors.UserNotFoundException;
 import com.trading212.weathertrip.controllers.validation.*;
+import com.trading212.weathertrip.domain.dto.UserProfileDTO;
 import com.trading212.weathertrip.domain.entities.User;
+import com.trading212.weathertrip.repositories.UserRepository;
 import com.trading212.weathertrip.services.MailService;
 import com.trading212.weathertrip.services.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -18,22 +21,24 @@ import java.util.Optional;
 public class AccountController {
     private final UserService userService;
     private final MailService mailService;
+    private final UserRepository userRepository;
 
-    public AccountController(UserService userService, MailService mailService) {
+    public AccountController(UserService userService, MailService mailService, UserRepository userRepository) {
         this.userService = userService;
         this.mailService = mailService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody @Valid RegisterUserValidation validation) {
         User registerUser = userService.registerUser(validation);
-        log.info("Register new user: {} ", registerUser);
-
-        mailService.sendActivationEmail(registerUser);
+        log.info("Register new user ");
+        
+//        mailService.sendActivationEmail(registerUser);
     }
 
-    @PostMapping("/account/activate")
+    @GetMapping("/account/activate")
     public void activate(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateAccount(key);
 
@@ -58,12 +63,17 @@ public class AccountController {
         }
     }
 
-    @PostMapping(path = "/account/reset-password/finish")
+    @PostMapping("/account/reset-password/finish")
     public void finishPasswordReset(@RequestBody PasswordAndKeyValidation validation) {
         Optional<User> user = userService.completePasswordReset(validation.getNewPassword(), validation.getKey());
 
         if (user.isEmpty()) {
             throw new UserNotFoundException("User with this reset key not found");
         }
+    }
+
+    @GetMapping("/user/{uuid}/profile")
+    public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable("uuid") String uuid) {
+        return ResponseEntity.ok(userService.getUserProfileByUuid(uuid));
     }
 }

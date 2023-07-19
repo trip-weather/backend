@@ -18,10 +18,14 @@ import static com.trading212.weathertrip.domain.constants.Constants.*;
 @Service
 public class ForecastService {
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
     private final WeatherLocationService weatherLocationService;
 
 
-    public ForecastService(RestTemplate restTemplate, WeatherLocationService weatherLocationService) {
+    public ForecastService(RestTemplate restTemplate,
+                           ObjectMapper objectMapper,
+                           WeatherLocationService weatherLocationService) {
+        this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
         this.weatherLocationService = weatherLocationService;
     }
@@ -52,7 +56,6 @@ public class ForecastService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
         String body = response.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
         WrapperForecastDTO forecasts = objectMapper.readValue(body, new TypeReference<WrapperForecastDTO>() {
         });
         return forecasts.getDaily();

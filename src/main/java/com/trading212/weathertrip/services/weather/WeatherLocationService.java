@@ -15,9 +15,11 @@ import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 @Service
 public class WeatherLocationService {
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
-    public WeatherLocationService(RestTemplate restTemplate) {
+    public WeatherLocationService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
 
     public String findLocation(String city) throws JsonProcessingException {
@@ -33,7 +35,6 @@ public class WeatherLocationService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
         String body = response.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
         List<WeatherLocationDTO> locations = objectMapper.readValue(body, new TypeReference<List<WeatherLocationDTO>>() {
         });
 

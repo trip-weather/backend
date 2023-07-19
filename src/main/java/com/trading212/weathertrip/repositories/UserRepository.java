@@ -1,6 +1,7 @@
 package com.trading212.weathertrip.repositories;
 
 import com.trading212.weathertrip.domain.entities.User;
+import com.trading212.weathertrip.domain.entities.UserFavouriteHotel;
 import com.trading212.weathertrip.services.mapper.DetailedUserRowMapper;
 import com.trading212.weathertrip.services.mapper.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +133,14 @@ public class UserRepository {
         }
     }
 
-    static class Queries{
+
+
+
+    static final class Queries{
+
+        private  Queries(){
+
+        }
         public static final String INSERT_INTO_USER_AUTHORITY = "INSERT INTO user_authority(authority_name, user_uuid) VALUES (?, ?)";
         public static final String INSERT_INTO_USERS = "INSERT INTO users (uuid, username, email, firstName, lastName, password, activated, activation_key, created_date ) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";

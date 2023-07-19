@@ -1,0 +1,706 @@
+[
+  {
+    "results": [
+      {
+        "id": 2599202,
+        "name": "Tabasko",
+        "mainPhotoId": 112227196,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/112227196.jpg?k=eb13ebf850ec51fbe1ebb86f6ae5600b475fe2db739cba2c18ec6ea9e28e281a&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/112227196.jpg?k=eb13ebf850ec51fbe1ebb86f6ae5600b475fe2db739cba2c18ec6ea9e28e281a&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.686045,
+        "longitude": 23.301067,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 420.449860063254
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "20:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 6.0,
+        "reviewScoreWord": "Pleasant",
+        "reviewCount": 50,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 1591719,
+        "name": "Hostel Alex 1",
+        "mainPhotoId": 61013755,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/61013755.jpg?k=9488db0f6223224248cb316a3c3e9d114b5cf5fd75054c38d83d44aa714f7339&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/61013755.jpg?k=9488db0f6223224248cb316a3c3e9d114b5cf5fd75054c38d83d44aa714f7339&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.7097625,
+        "longitude": 23.318201,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 473.006092571161
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "20:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "12:00",
+          "fromTime": "10:30"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 4.3,
+        "reviewScoreWord": "Disappointing",
+        "reviewCount": 120,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 8478345,
+        "name": "Hotello",
+        "mainPhotoId": 411661044,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/411661044.jpg?k=93cbc7c954243473f8ee4a9dcdb0e4a0c304e61befcd38e239c984698e37964b&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/411661044.jpg?k=93cbc7c954243473f8ee4a9dcdb0e4a0c304e61befcd38e239c984698e37964b&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.7044813233407,
+        "longitude": 23.3235729675112,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 562.60395775064
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "22:00",
+          "fromTime": "15:00"
+        },
+        "checkout": {
+          "untilTime": "12:00",
+          "fromTime": "05:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 5.5,
+        "reviewScoreWord": "Passable",
+        "reviewCount": 413,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 3129042,
+        "name": "Guest House Iveta",
+        "mainPhotoId": 131092988,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/131092988.jpg?k=1e21857d7b492d665d68a4520ebce9d9fa3936de46aaf75b067f038c5e9053af&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/131092988.jpg?k=1e21857d7b492d665d68a4520ebce9d9fa3936de46aaf75b067f038c5e9053af&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.6326958043546,
+        "longitude": 23.4440946578979,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 525.562325079068
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "00:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "12:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 4.3,
+        "reviewScoreWord": "Disappointing",
+        "reviewCount": 38,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 3841752,
+        "name": "Guest House Mania",
+        "mainPhotoId": 156282485,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/156282485.jpg?k=5a2a425029fa26a8f0c1de0ed6dc5d8941f5e54345ab7d1330e872cd183580ee&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/156282485.jpg?k=5a2a425029fa26a8f0c1de0ed6dc5d8941f5e54345ab7d1330e872cd183580ee&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.685205,
+        "longitude": 23.301422,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 546.164368222167
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "20:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 8.0,
+        "reviewScoreWord": "Very good",
+        "reviewCount": 52,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 10208002,
+        "name": "Green cube hostel",
+        "mainPhotoId": 466630365,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/466630365.jpg?k=53b43754573dad47c321b4895fbc29c865eeffbae071857d02eeb8c001b95f31&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/466630365.jpg?k=53b43754573dad47c321b4895fbc29c865eeffbae071857d02eeb8c001b95f31&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.707013,
+        "longitude": 23.317653,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 546.58481808223
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "00:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 8.6,
+        "reviewScoreWord": "Fabulous",
+        "reviewCount": 8,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 289464,
+        "name": "Elegance Hostel and Guesthouse",
+        "mainPhotoId": 80393346,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/80393346.jpg?k=88caecd88686c25f53526921b4bef83579250a3ee3db29b56f3a9bd5cd2176c6&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/80393346.jpg?k=88caecd88686c25f53526921b4bef83579250a3ee3db29b56f3a9bd5cd2176c6&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.7007147938031,
+        "longitude": 23.3178940415382,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 567.607311085393
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "22:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 7.1,
+        "reviewScoreWord": "Good",
+        "reviewCount": 629,
+        "qualityClass": 0,
+        "propertyClass": 2,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 353765,
+        "name": "Sky Rooms",
+        "mainPhotoId": 6283381,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/6283381.jpg?k=53b42f07219777c1b1ab1b4b340e3b878bb67dc0e57500c0da32cf4a6720569a&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/6283381.jpg?k=53b42f07219777c1b1ab1b4b340e3b878bb67dc0e57500c0da32cf4a6720569a&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.6991930304793,
+        "longitude": 23.3078598976135,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 578.118557586974
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "20:00",
+          "fromTime": "16:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 6.0,
+        "reviewScoreWord": "Pleasant",
+        "reviewCount": 141,
+        "qualityClass": 0,
+        "propertyClass": 1,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 5231342,
+        "name": "Hotel Fancy",
+        "mainPhotoId": 274492869,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/274492869.jpg?k=37eec49f82dbad5d72a729a0d54436d16f056723ee30458a1acfa715b9268166&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/274492869.jpg?k=37eec49f82dbad5d72a729a0d54436d16f056723ee30458a1acfa715b9268166&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.679529,
+        "longitude": 23.230341,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 578.118557586975
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "12:00",
+          "fromTime": "12:00"
+        },
+        "checkout": {
+          "untilTime": "12:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 8.0,
+        "reviewScoreWord": "Very good",
+        "reviewCount": 144,
+        "qualityClass": 0,
+        "propertyClass": 2,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 9601233,
+        "name": "10 Coins Hostel & tours",
+        "mainPhotoId": 436733398,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/436733398.jpg?k=30b397ed882398494d3346c4dc57838a87a772c53e524a3e8761480cbc36aca7&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/436733398.jpg?k=30b397ed882398494d3346c4dc57838a87a772c53e524a3e8761480cbc36aca7&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.722012,
+        "longitude": 23.303266,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 580.220806887291
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "23:30",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 8.4,
+        "reviewScoreWord": "Very good",
+        "reviewCount": 53,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 2178989,
+        "name": "Serdika Rooms",
+        "mainPhotoId": 393789443,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/393789443.jpg?k=b0a6991df9c8956eb1320a84e7f99be253927aa70f175ed868f1c19d9f16e7c6&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/393789443.jpg?k=b0a6991df9c8956eb1320a84e7f99be253927aa70f175ed868f1c19d9f16e7c6&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.6983253531921,
+        "longitude": 23.321071182209,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 600.759782551381
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "22:00",
+          "fromTime": "15:00"
+        },
+        "checkout": {
+          "untilTime": "12:00",
+          "fromTime": "05:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 5.8,
+        "reviewScoreWord": "Okay",
+        "reviewCount": 518,
+        "qualityClass": 3,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 9870825,
+        "name": "Cozy Studio in Center of Sofia",
+        "mainPhotoId": 459627653,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/459627653.jpg?k=79c7342463758cd53280d899403ff97d063e990d83f149565d833e1fa9fc7a2d&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/459627653.jpg?k=79c7342463758cd53280d899403ff97d063e990d83f149565d833e1fa9fc7a2d&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.7063096,
+        "longitude": 23.3268425,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 618.691969083079
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "00:00",
+          "fromTime": "15:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 4.9,
+        "reviewScoreWord": "Disappointing",
+        "reviewCount": 7,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 293277,
+        "name": "Hotel Gorna Banya",
+        "mainPhotoId": 299891495,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/299891495.jpg?k=ed66e5631ffaeff0c06e08eb5e62ed2271c2760e55886820fbf342f4d7c7c5f7&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/299891495.jpg?k=ed66e5631ffaeff0c06e08eb5e62ed2271c2760e55886820fbf342f4d7c7c5f7&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.6776221651248,
+        "longitude": 23.2374626398087,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 625.314054379075
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "00:00",
+          "fromTime": "13:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "04:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 7.3,
+        "reviewScoreWord": "Good",
+        "reviewCount": 1133,
+        "qualityClass": 0,
+        "propertyClass": 3,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 29346,
+        "name": "Guesthouse Tzar Asen",
+        "mainPhotoId": 700038,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/700038.jpg?k=4373bd5c2523f56da548f172c64f6db54f628f0f70481c340a669ce2dfe0bd4b&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/700038.jpg?k=4373bd5c2523f56da548f172c64f6db54f628f0f70481c340a669ce2dfe0bd4b&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.6876504637496,
+        "longitude": 23.3171644806862,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 630.674790094881
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "23:30",
+          "fromTime": "13:00"
+        },
+        "checkout": {
+          "untilTime": "12:00",
+          "fromTime": "07:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 5.2,
+        "reviewScoreWord": "Passable",
+        "reviewCount": 152,
+        "qualityClass": 0,
+        "propertyClass": 3,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 5713618,
+        "name": "Family hotel Zora",
+        "mainPhotoId": 223583564,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/223583564.jpg?k=199988114f8d20c34726a9014d690a00f076fd057168f64a42b960b53a1e4ef8&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/223583564.jpg?k=199988114f8d20c34726a9014d690a00f076fd057168f64a42b960b53a1e4ef8&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.688963,
+        "longitude": 23.297145,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 630.674790094881
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "22:00",
+          "fromTime": "13:00"
+        },
+        "checkout": {
+          "untilTime": "12:00",
+          "fromTime": "07:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 6.9,
+        "reviewScoreWord": "Pleasant",
+        "reviewCount": 60,
+        "qualityClass": 0,
+        "propertyClass": 1,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 9589085,
+        "name": "Преходно студио, дневна с кухня и стая",
+        "mainPhotoId": 426701013,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/426701013.jpg?k=b7691faa6433b9e275e9ff56241e15d04ec2f2e8e06d90260cf1eda861cbafce&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/426701013.jpg?k=b7691faa6433b9e275e9ff56241e15d04ec2f2e8e06d90260cf1eda861cbafce&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.7068609,
+        "longitude": 23.3539604,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 630.674790094881
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "22:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "13:00",
+          "fromTime": "10:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 1.0,
+        "reviewScoreWord": "Bad",
+        "reviewCount": 1,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 334322,
+        "name": "Stivan Iskar Hotel",
+        "mainPhotoId": 465324781,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/465324781.jpg?k=5400d627217698c3c28219252695bf3fc7b2812cab47e25449664d647769e5ce&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/465324781.jpg?k=5400d627217698c3c28219252695bf3fc7b2812cab47e25449664d647769e5ce&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.6996897759754,
+        "longitude": 23.3263456821442,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 643.288285896779
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "00:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "12:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 6.9,
+        "reviewScoreWord": "Pleasant",
+        "reviewCount": 584,
+        "qualityClass": 0,
+        "propertyClass": 2,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 904590,
+        "name": "Smart Hostel Sofia",
+        "mainPhotoId": 237441006,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/237441006.jpg?k=b9134674823b6fc361f77f8eaf79ee9ab64d140804bac9955b3c3c71b7c70b2c&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/237441006.jpg?k=b9134674823b6fc361f77f8eaf79ee9ab64d140804bac9955b3c3c71b7c70b2c&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.7001864251869,
+        "longitude": 23.3300337195396,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 672.803866073219
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "00:00",
+          "fromTime": "14:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 7.6,
+        "reviewScoreWord": "Good",
+        "reviewCount": 2487,
+        "qualityClass": 0,
+        "propertyClass": 1,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 9997681,
+        "name": "Blue rooms",
+        "mainPhotoId": 465853973,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/465853973.jpg?k=ae5ca2aec5f9064241c60d2aa4e6c377664c3411c2b7b1aa9b3f016710e8f1f8&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/465853973.jpg?k=ae5ca2aec5f9064241c60d2aa4e6c377664c3411c2b7b1aa9b3f016710e8f1f8&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.6523024,
+        "longitude": 23.3458946,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 683.231022602788
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "00:00",
+          "fromTime": "15:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:00"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 7.5,
+        "reviewScoreWord": "Good",
+        "reviewCount": 73,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      },
+      {
+        "id": 9997624,
+        "name": "Savana studios",
+        "mainPhotoId": 454422929,
+        "photoMainUrl": "https://cf.bstatic.com/xdata/images/hotel/400x800/454422929.jpg?k=4ae332043206145eec6bca0078febf7d21b3dc81be1e1a5e47efed69760a0691&o=",
+        "photoUrls": [
+          "https://cf.bstatic.com/xdata/images/hotel/square60/454422929.jpg?k=4ae332043206145eec6bca0078febf7d21b3dc81be1e1a5e47efed69760a0691&o="
+        ],
+        "countryCode": "bg",
+        "latitude": 42.6461798,
+        "longitude": 23.3420584,
+        "priceBreakdown": {
+          "grossPrice": {
+            "currency": "AED",
+            "value": 683.231022602788
+          }
+        },
+        "currency": "BGN",
+        "checkin": {
+          "untilTime": "00:00",
+          "fromTime": "15:00"
+        },
+        "checkout": {
+          "untilTime": "11:00",
+          "fromTime": "00:30"
+        },
+        "checkoutDate": "2023-07-19",
+        "checkinDate": "2023-07-14",
+        "reviewScore": 6.2,
+        "reviewScoreWord": "Pleasant",
+        "reviewCount": 26,
+        "qualityClass": 0,
+        "propertyClass": 0,
+        "wishlistName": "Sofia"
+      }
+    ]
+  }
+]

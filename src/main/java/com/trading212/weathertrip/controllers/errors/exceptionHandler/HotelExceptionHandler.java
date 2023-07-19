@@ -7,15 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class InvalidUserExceptionHandler {
+public class HotelExceptionHandler {
 
-    @ExceptionHandler({
-            UsernameAlreadyUsedException.class,
-            EmailAlreadyUsedException.class,
-            InvalidPasswordException.class,
-            UserNotFoundException.class,
-            InvalidUserException.class})
-    public ResponseEntity<String> handleInvalidUserException(RuntimeException ex) {
+    @ExceptionHandler(HotelNotFoundException.class)
+    public ResponseEntity<String> handleHotelNotFoundException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

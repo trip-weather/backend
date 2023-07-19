@@ -9,14 +9,14 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HotelLocationDTO {
-    @JsonProperty(namespace = "dest_id")
-    String dest_id;
-    @JsonProperty()
-    String city_name;
+    @JsonProperty("dest_id")
+    String destId;
+    @JsonProperty("city_name")
+    String cityName;
 
     public HotelLocationDTO(@JsonProperty String dest_id, @JsonProperty String city_name) {
-        this.dest_id = dest_id;
-        this.city_name = city_name;
+        this.destId = dest_id;
+        this.cityName = city_name;
     }
 
     public HotelLocationDTO() {

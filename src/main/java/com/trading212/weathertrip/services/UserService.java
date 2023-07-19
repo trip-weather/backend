@@ -6,16 +6,21 @@ import com.trading212.weathertrip.controllers.errors.InvalidPasswordException;
 import com.trading212.weathertrip.controllers.errors.UsernameAlreadyUsedException;
 import com.trading212.weathertrip.controllers.validation.ChangePasswordValidation;
 import com.trading212.weathertrip.controllers.validation.RegisterUserValidation;
+import com.trading212.weathertrip.domain.dto.UserProfileDTO;
+import com.trading212.weathertrip.domain.dto.hotel.FavouriteHotelDTO;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -23,22 +28,27 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
+    private final UserHotelService userHotelService;
+    private final ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthService authService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthService authService, UserHotelService userHotelService, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authService = authService;
+        this.userHotelService = userHotelService;
+        this.modelMapper = modelMapper;
     }
 
     public User registerUser(RegisterUserValidation validation) {
-        if (!validation.getPassword().equals(validation.getRepeatedPassword())){
+        if (!validation.getPassword().equals(validation.getRepeatedPassword())) {
             throw new InvalidPasswordException("Passwords must be same!");
-        }
-        if (this.userRepository.findByEmail(validation.getEmail()).isPresent()) {
-            throw new EmailAlreadyUsedException("Email is already used!");
         }
         if (this.userRepository.findByUsername(validation.getUsername()).isPresent()) {
             throw new UsernameAlreadyUsedException("Username is already used!");
+        }
+
+        if (this.userRepository.findByEmail(validation.getEmail()).isPresent()) {
+            throw new EmailAlreadyUsedException("Email is already used!");
         }
 
         String encryptedPassword = passwordEncoder.encode(validation.getPassword());
@@ -107,5 +117,25 @@ public class UserService {
             userRepository.saveUpdateActivation(user);
             return user;
         });
+    }
+
+    public UserProfileDTO getUserProfileByUuid(String uuid) {
+        //TODO add reserved hotels and flights
+        User authUser = authService.getAuthenticatedUser();
+        List<FavouriteHotelDTO> favouriteHotels =
+                userHotelService
+                        .getUserFavouriteHotels(uuid).stream().map(hotel -> modelMapper.map(hotel, FavouriteHotelDTO.class))
+
+                        .toList();
+
+        return UserProfileDTO.builder()
+                .userUuid(authUser.getUuid())
+                .email(authUser.getEmail())
+                .username(authUser.getUsername())
+                .password(authUser.getPassword())
+                .firstName(authUser.getFirstName())
+                .lastName(authUser.getLastName())
+                .favouriteHotels(favouriteHotels)
+                .build();
     }
 }
