@@ -29,9 +29,9 @@ public class SearchController {
 
     @GetMapping("/search")
     public ResponseEntity<List<WrapperHotelDTO>> search(@RequestParam(value = "city", required = false) String city,
-                                                              @RequestParam(value = "minTemp", required = false) String minTemp,
-                                                              @RequestParam(value = "maxTemp", required = false) String maxTemp,
-                                                              @RequestParam(value = "period", required = false) Integer period
+                                                        @RequestParam(value = "minTemp", required = false) String minTemp,
+                                                        @RequestParam(value = "maxTemp", required = false) String maxTemp,
+                                                        @RequestParam(value = "period", required = false) Integer period
     ) throws IOException {
         List<WrapperHotelDTO> vocations = vocationService.search(city, minTemp, maxTemp, period);
         hotelService.save(vocations);
@@ -40,7 +40,9 @@ public class SearchController {
 
     @GetMapping("/suggested-hotels")
     public ResponseEntity<List<HotelResultDTO>> suggestedHotels() throws IOException {
-        return ResponseEntity.ok(hotelService.getHotels());
+        List<HotelResultDTO> suggestedHotels = hotelService.getHotels();
+        hotelService.save(List.of(new WrapperHotelDTO(suggestedHotels)));
+        return ResponseEntity.ok(suggestedHotels);
     }
 
     @GetMapping("/get/cities")

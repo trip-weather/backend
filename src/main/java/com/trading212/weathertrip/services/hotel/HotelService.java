@@ -49,11 +49,11 @@ public class HotelService {
     }
 
     public List<WrapperHotelDTO> findAvailableHotels(Map<LocalDate, LocalDate> periods, String cityName) throws IOException {
-        String destinationId = getDestinationId(cityName);
+//        String destinationId = getDestinationId(cityName);
 //        HttpEntity<Object> requestEntity = getRequestEntity();
-
+//
 //        List<WrapperHotelDTO> result = new ArrayList<>();
-
+//
 //        for (Map.Entry<LocalDate, LocalDate> period : periods.entrySet()) {
 //            String url = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=price&adults_number=2&checkin_date=" + period.getKey() + "&filter_by_currency=AED&dest_id=" + destinationId + "&locale=en-gb&checkout_date=" + period.getValue() + "&units=metric&room_number=1&dest_type=city";
 //            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
@@ -66,7 +66,7 @@ public class HotelService {
 //        }
 
 
-        // Only for testing
+// Only for testing
         String jsonFilePath = "src/main/resources/hotel_in_sofia_data.json";
         String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
 
@@ -100,8 +100,8 @@ public class HotelService {
 //        List<HotelResultDTO> result = new ArrayList<>();
 //
 //        for (String destinationId : destinationIds) {
-//            String url = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=price&adults_number=2&checkin_date="
-//                    + DEFAULT_START_DATE + "&filter_by_currency=AED&dest_id=" + destinationId + "&locale=en-gb&checkout_date="
+//            String url = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=popularity&adults_number=2&checkin_date="
+//                    + DEFAULT_START_DATE + "&filter_by_currency=EUR&dest_id=" + destinationId + "&locale=en-gb&checkout_date="
 //                    + DEFAULT_END_DATE + "&units=metric&room_number=1&dest_type=city";
 //            getResponse(requestEntity, result, url);
 //        }
@@ -163,8 +163,10 @@ public class HotelService {
         int nights = (int) ChronoUnit.DAYS.between(LocalDate.parse(arrivalDate), LocalDate.parse(departureDate));
 
         HotelDetailsDTO hotelDetailsDTO = modelMapper.map(data, HotelDetailsDTO.class);
+
         hotelDetailsDTO.setPricePerDay(pricePerDay);
-        hotelDetailsDTO.setTotalPrice(pricePerDay  * nights);
+        hotelDetailsDTO.setTotalPrice(pricePerDay * nights);
+        hotelDetailsDTO.setNights(nights);
         hotelDetailsDTO.setPhotos(photos);
         hotelDetailsDTO.setDescription(description);
         hotelDetailsDTO.setFavouriteCount(hotel.getFavouriteCount());

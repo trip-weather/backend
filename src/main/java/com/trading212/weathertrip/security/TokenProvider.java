@@ -68,6 +68,7 @@ public class TokenProvider {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
+
         com.trading212.weathertrip.domain.entities.User user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

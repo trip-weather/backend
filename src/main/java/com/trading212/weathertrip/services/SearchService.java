@@ -110,10 +110,10 @@ public class SearchService {
             boolean validPeriod = true;
             for (int j = i; j < i + period; j++) {
                 ForecastDTO data = forecast.getData()[j];
-                double forecastMinTemp = data.getTemperature_min();
+//                double forecastMinTemp = data.getTemperature_min();
                 double forecastMaxTemp = data.getTemperature_max();
 
-                if (forecastMinTemp < Double.parseDouble(minTemp) || forecastMaxTemp > Double.parseDouble(maxTemp)) {
+                if (forecastMaxTemp < Double.parseDouble(minTemp) || forecastMaxTemp > Double.parseDouble(maxTemp)) {
                     validPeriod = false;
                     break;
                 }

@@ -2,6 +2,7 @@ package com.trading212.weathertrip.controllers;
 
 import com.trading212.weathertrip.controllers.errors.UserNotFoundException;
 import com.trading212.weathertrip.controllers.validation.*;
+import com.trading212.weathertrip.controllers.validation.UpdateUserValidation;
 import com.trading212.weathertrip.domain.dto.UserProfileDTO;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.UserRepository;
@@ -21,12 +22,11 @@ import java.util.Optional;
 public class AccountController {
     private final UserService userService;
     private final MailService mailService;
-    private final UserRepository userRepository;
 
-    public AccountController(UserService userService, MailService mailService, UserRepository userRepository) {
+    public AccountController(UserService userService, MailService mailService) {
         this.userService = userService;
         this.mailService = mailService;
-        this.userRepository = userRepository;
+
     }
 
     @PostMapping("/register")
@@ -34,7 +34,7 @@ public class AccountController {
     public void register(@RequestBody @Valid RegisterUserValidation validation) {
         User registerUser = userService.registerUser(validation);
         log.info("Register new user ");
-        
+
 //        mailService.sendActivationEmail(registerUser);
     }
 
@@ -75,5 +75,12 @@ public class AccountController {
     @GetMapping("/user/{uuid}/profile")
     public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable("uuid") String uuid) {
         return ResponseEntity.ok(userService.getUserProfileByUuid(uuid));
+    }
+
+    @PatchMapping("/user/{uuid}/update")
+    public ResponseEntity update(@RequestBody @Valid UpdateUserValidation validation,
+                                 @PathVariable("uuid") String uuid) {
+        userService.update(validation, uuid);
+        return ResponseEntity.ok().build();
     }
 }

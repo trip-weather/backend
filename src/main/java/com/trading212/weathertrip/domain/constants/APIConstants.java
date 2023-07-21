@@ -6,12 +6,12 @@ package com.trading212.weathertrip.domain.constants;
 public class APIConstants {
     public static final String WEATHER_LOCATION_URL = "https://ai-weather-by-meteosource.p.rapidapi.com/find_places?text=";
     public static final String RAPID_API_KEY = "X-RapidAPI-Key";
-    public static final String WEATHER_API_KEY = "6ffc965ademshed5cc08f837e1b2p11214bjsn58efccf64364";
+    public static final String WEATHER_API_KEY = "d55e21f88bmshf4a023cdd5a963fp1cf286jsndfd376302100";
     public static final String RAPID_API_HOST = "X-RapidAPI-Host";
     public static final String WEATHER_API_HOST = "ai-weather-by-meteosource.p.rapidapi.com";
     public static final String FORECAST_URL = "https://ai-weather-by-meteosource.p.rapidapi.com/daily?units=auto&place_id=";
 
-    public static final String BOOKING_API_KEY = "6ffc965ademshed5cc08f837e1b2p11214bjsn58efccf64364";
+    public static final String BOOKING_API_KEY = "d55e21f88bmshf4a023cdd5a963fp1cf286jsndfd376302100";
     public static final String BOOKING_API_HOST = "booking-com.p.rapidapi.com";
 
     public static final String BOOKING_LOCATION_URL = "https://booking-com.p.rapidapi.com/v1/hotels/locations?locale=en-gb&name=";

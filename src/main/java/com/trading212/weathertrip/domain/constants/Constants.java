@@ -20,5 +20,5 @@ public final class Constants {
     public static final LocalDate DEFAULT_END_DATE = LocalDate.now().plusDays(DEFAULT_PERIOD);
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public static final List<String> GET_CITIES = List.of("Sofia", "Plovdiv", "Florence", "Alanya");
+    public static final List<String> GET_CITIES = List.of("Milan", "Nice", "Florence", "Alanya");
 }
