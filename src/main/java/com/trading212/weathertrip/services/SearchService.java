@@ -38,18 +38,21 @@ public class SearchService {
         if (city != null) {
             //CITY + TEMP OR CITY + TEMP + PERIOD
             if (minTemp != null && maxTemp != null) {
-                ForecastDataDTO forecast = forecastService.getForecastForPlace(city);
-                periods = getAppropriatePeriodsForCity(forecast, minTemp, maxTemp, period);
-
-                if (periods.isEmpty()) {
-                    throw new WeatherException("No options found for this temperature.");
+                List<ForecastDTO> weatherData = forecastService.getWeatherData(city);
+                if (weatherData == null) {
+                    forecastService.saveForecast(city);
+                    weatherData = forecastService.getWeatherData(city);
                 }
+                periods = getAppropriatePeriodsForCity(weatherData, minTemp, maxTemp, period);
                 //CITY + PERIOD OR CITY
 
             } else {
                 periods.put(DEFAULT_START_DATE, period != null ? LocalDate.now().plusDays(period) : DEFAULT_END_DATE);
             }
-            // TODO check if periods are null
+
+            if (periods.isEmpty()) {
+                throw new WeatherException("No options found for the minimum and maximum temperature you submitted.");
+            }
             return hotelService.findAvailableHotels(periods, city);
         }
 
@@ -60,18 +63,18 @@ public class SearchService {
         }
 
         // PERIOD + TEMP OR ONLY TEMP
-        List<ForecastDataDTO> forecastForAllCities = forecastService.getForecastForAllCities();
-        periods = getAppropriatePeriodsForAllCities(forecastForAllCities, minTemp, maxTemp, period);
+        List<List<ForecastDTO>> weatherDataForTargetCities = forecastService.getWeatherDataForTargetCities();
+        periods = getAppropriatePeriodsForAllCities(weatherDataForTargetCities, minTemp, maxTemp, period);
 
         if (periods.isEmpty()) {
-            throw new WeatherException("No options found for the minimum and maximum temperature you submitted");
+            throw new WeatherException("No options found for the minimum and maximum temperature you submitted.");
         }
 
         return List.of(new WrapperHotelDTO(hotelService.findAvailableHotelsForAllCities(periods)));
     }
 
 
-    private HashMap<LocalDate, LocalDate> getAppropriatePeriodsForAllCities(List<ForecastDataDTO> forecasts,
+    private HashMap<LocalDate, LocalDate> getAppropriatePeriodsForAllCities(List<List<ForecastDTO>> forecasts,
                                                                             String minTemp,
                                                                             String maxTemp,
                                                                             Integer period) {
@@ -82,13 +85,13 @@ public class SearchService {
             period = Constants.DEFAULT_PERIOD;
         }
 
-        for (ForecastDataDTO forecast : forecasts) {
+        for (List<ForecastDTO> forecast : forecasts) {
             getPeriod(minTemp, maxTemp, result, period, forecast);
         }
         return result;
     }
 
-    private Map<LocalDate, LocalDate> getAppropriatePeriodsForCity(ForecastDataDTO forecast,
+    private Map<LocalDate, LocalDate> getAppropriatePeriodsForCity(List<ForecastDTO> forecast,
                                                                    String minTemp,
                                                                    String maxTemp, Integer period) {
         LinkedHashMap<LocalDate, LocalDate> result = new LinkedHashMap<>();
@@ -105,22 +108,32 @@ public class SearchService {
         return Constants.GET_CITIES;
     }
 
-    private void getPeriod(String minTemp, String maxTemp, LinkedHashMap<LocalDate, LocalDate> result, Integer period, ForecastDataDTO forecast) {
-        for (int i = 0; i < forecast.getData().length - period + 1; i++) {
+    private void getPeriod(String minTemp,
+                           String maxTemp,
+                           LinkedHashMap<LocalDate, LocalDate> result,
+                           Integer period,
+                           List<ForecastDTO> forecast) {
+
+
+        double minTempValue = Double.parseDouble(minTemp);
+        double maxTempValue = Double.parseDouble(maxTemp);
+
+        for (int i = 0; i <= forecast.size() - period; i++) {
             boolean validPeriod = true;
+
             for (int j = i; j < i + period; j++) {
-                ForecastDTO data = forecast.getData()[j];
-//                double forecastMinTemp = data.getTemperature_min();
+                ForecastDTO data = forecast.get(j);
                 double forecastMaxTemp = data.getTemperature_max();
 
-                if (forecastMaxTemp < Double.parseDouble(minTemp) || forecastMaxTemp > Double.parseDouble(maxTemp)) {
+                if (forecastMaxTemp < minTempValue || forecastMaxTemp > maxTempValue) {
                     validPeriod = false;
                     break;
                 }
             }
+
             if (validPeriod) {
-                String startDateString = forecast.getData()[i].getDay();
-                String endDateString = forecast.getData()[i + period - 1].getDay();
+                String startDateString = forecast.get(i).getDay();
+                String endDateString = forecast.get(i + period - 1).getDay();
 
                 LocalDate startDate = LocalDate.parse(startDateString, DATE_FORMATTER);
                 LocalDate endDate = LocalDate.parse(endDateString, DATE_FORMATTER);

@@ -22,7 +22,7 @@ public class UserHotelController {
     }
 
 
-    @PostMapping("/hotel/{id}/addToFavourite")
+    @PostMapping("/hotel/{id}/like")
     public ResponseEntity addHotelToFavourite(@PathVariable("id") Integer externalId) {
         User user = authService.getAuthenticatedUser();
         if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -33,7 +33,7 @@ public class UserHotelController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/hotel/{id}/removeFromFavourite")
+    @DeleteMapping("/hotel/{id}/unlike")
     public ResponseEntity removeHotelFromFavourite(@PathVariable("id") Integer externalId) {
         User user = authService.getAuthenticatedUser();
         if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

@@ -5,14 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
 public class ForecastDataDTO implements Serializable {
     @JsonProperty(namespace = "daily")
-    ForecastDTO[] data;
+    List<ForecastDTO> data;
 
-    public ForecastDataDTO(ForecastDTO[] data) {
+    public ForecastDataDTO(List<ForecastDTO> data) {
         this.data = data;
     }
 

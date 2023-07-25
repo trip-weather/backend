@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers("/api/account/change-password").authenticated()
                 .requestMatchers("/api/user/{uuid}/profile", "/api/user/{uuid}/update").authenticated()
-                .requestMatchers("/api/hotel/{id}/addToFavourite", "/api/hotel/{id}/removeFromFavourite").authenticated()
+                .requestMatchers("/api/hotel/{id}/like", "/api/hotel/{id}/unlike").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic()

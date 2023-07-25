@@ -121,7 +121,7 @@ public class UserService {
     }
 
     public UserProfileDTO getUserProfileByUuid(String uuid) {
-        //TODO add reserved hotels and flights
+        // TODO add reserved hotels and flights
         User authUser = authService.getAuthenticatedUser();
         List<FavouriteHotelDTO> favouriteHotels =
                 userHotelService
