@@ -4,4 +4,6 @@ public class Departure {
     private String iataCode;
     private String terminal;
     private String at;
+    private String city;
+    private String country;
 }

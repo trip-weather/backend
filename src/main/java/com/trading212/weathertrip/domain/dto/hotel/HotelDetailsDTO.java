@@ -1,5 +1,6 @@
 package com.trading212.weathertrip.domain.dto.hotel;
 
+import com.trading212.weathertrip.domain.dto.hotelDetailsData.Properties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ public class HotelDetailsDTO {
     private int hotelId;
     private String name;
     private List<HotelPhoto> photos;
+    private List<Properties> properties;
     private String description;
     private Integer favouriteCount;
     private double pricePerDay;
@@ -28,4 +30,5 @@ public class HotelDetailsDTO {
     private String latitude;
     private String longitude;
     private String url;
+    private int nights;
 }

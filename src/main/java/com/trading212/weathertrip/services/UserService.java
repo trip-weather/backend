@@ -6,6 +6,7 @@ import com.trading212.weathertrip.controllers.errors.InvalidPasswordException;
 import com.trading212.weathertrip.controllers.errors.UsernameAlreadyUsedException;
 import com.trading212.weathertrip.controllers.validation.ChangePasswordValidation;
 import com.trading212.weathertrip.controllers.validation.RegisterUserValidation;
+import com.trading212.weathertrip.controllers.validation.UpdateUserValidation;
 import com.trading212.weathertrip.domain.dto.UserProfileDTO;
 import com.trading212.weathertrip.domain.dto.hotel.FavouriteHotelDTO;
 import com.trading212.weathertrip.domain.entities.User;
@@ -120,7 +121,7 @@ public class UserService {
     }
 
     public UserProfileDTO getUserProfileByUuid(String uuid) {
-        //TODO add reserved hotels and flights
+        // TODO add reserved hotels and flights
         User authUser = authService.getAuthenticatedUser();
         List<FavouriteHotelDTO> favouriteHotels =
                 userHotelService
@@ -137,5 +138,9 @@ public class UserService {
                 .lastName(authUser.getLastName())
                 .favouriteHotels(favouriteHotels)
                 .build();
+    }
+
+    public void update(UpdateUserValidation validation, String uuid) {
+        userRepository.updateUser(validation, uuid);
     }
 }

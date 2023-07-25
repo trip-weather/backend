@@ -8,4 +8,6 @@ import lombok.Setter;
 public class Arrival {
     private String iataCode;
     private String at;
+    private String city;
+    private String country;
 }

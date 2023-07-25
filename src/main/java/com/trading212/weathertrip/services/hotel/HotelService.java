@@ -49,13 +49,17 @@ public class HotelService {
     }
 
     public List<WrapperHotelDTO> findAvailableHotels(Map<LocalDate, LocalDate> periods, String cityName) throws IOException {
-        String destinationId = getDestinationId(cityName);
+//        String destinationId = getDestinationId(cityName);
 //        HttpEntity<Object> requestEntity = getRequestEntity();
-
+//
 //        List<WrapperHotelDTO> result = new ArrayList<>();
-
+//
 //        for (Map.Entry<LocalDate, LocalDate> period : periods.entrySet()) {
-//            String url = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=price&adults_number=2&checkin_date=" + period.getKey() + "&filter_by_currency=AED&dest_id=" + destinationId + "&locale=en-gb&checkout_date=" + period.getValue() + "&units=metric&room_number=1&dest_type=city";
+//            String url = HOTEL_SEARCH_URL
+//                    + period.getKey() + "&filter_by_currency=EUR&dest_id="
+//                    + destinationId + "&locale=en-gb&checkout_date="
+//                    + period.getValue() + "&units=metric&room_number=1&dest_type=city";
+//
 //            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 //
 //            String body = response.getBody();
@@ -66,7 +70,7 @@ public class HotelService {
 //        }
 
 
-        // Only for testing
+// Only for testing
         String jsonFilePath = "src/main/resources/hotel_in_sofia_data.json";
         String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
 
@@ -83,8 +87,9 @@ public class HotelService {
         for (String cityName : GET_CITIES) {
             String destinationId = getDestinationId(cityName);
             for (Map.Entry<LocalDate, LocalDate> period : periods.entrySet()) {
-                String url = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=price&adults_number=2&checkin_date="
-                        + period.getKey() + "&filter_by_currency=AED&dest_id=" + destinationId + "&locale=en-gb&checkout_date="
+                String url = HOTEL_SEARCH_URL
+                        + period.getKey() + "&filter_by_currency=EUR&dest_id="
+                        + destinationId + "&locale=en-gb&checkout_date="
                         + period.getValue() + "&units=metric&room_number=1&dest_type=city&rows=4";
 
                 getResponse(requestEntity, result, url);
@@ -100,36 +105,25 @@ public class HotelService {
 //        List<HotelResultDTO> result = new ArrayList<>();
 //
 //        for (String destinationId : destinationIds) {
-//            String url = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=price&adults_number=2&checkin_date="
-//                    + DEFAULT_START_DATE + "&filter_by_currency=AED&dest_id=" + destinationId + "&locale=en-gb&checkout_date="
+//            String url = HOTEL_SEARCH_URL
+//                    + DEFAULT_START_DATE + "&filter_by_currency=EUR&dest_id="
+//                    + destinationId + "&locale=en-gb&checkout_date="
 //                    + DEFAULT_END_DATE + "&units=metric&room_number=1&dest_type=city";
 //            getResponse(requestEntity, result, url);
 //        }
 
-        // only for testing
+//         only for testing
         String jsonFilePath = "src/main/resources/hotel_in_sofia_data.json";
         String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
 
         List<WrapperHotelDTO> hotels = objectMapper.readValue(jsonContent, new TypeReference<List<WrapperHotelDTO>>() {
         });
         return hotels.get(0).getResults();
+
+//        return result;
     }
 
-    public List<HotelResultDTO> getHotelsByPeriod(int period) throws JsonProcessingException {
-        ArrayList<String> destinationIds = getDestinationIds();
-        HttpEntity<Object> requestEntity = getRequestEntity();
 
-        List<HotelResultDTO> result = new ArrayList<>();
-
-        for (String destinationId : destinationIds) {
-            String url = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=price&adults_number=2&checkin_date="
-                    + DEFAULT_START_DATE + "&filter_by_currency=AED&dest_id=" + destinationId + "&locale=en-gb&checkout_date="
-                    + DEFAULT_START_DATE.plusDays(period) + "&units=metric&room_number=1&dest_type=city";
-
-            getResponse(requestEntity, result, url);
-        }
-        return result;
-    }
 
 
     public Hotel findByExternalId(Integer externalId) {
@@ -145,7 +139,7 @@ public class HotelService {
     }
 
     public HotelDetailsDTO getHotel(Integer externalId, String checkInDate, String checkOutDate) throws JsonProcessingException {
-        // TODO make request to
+        // TODO make request to reservations
 
         Hotel hotel = hotelRepository
                 .findByExternalId(externalId)
@@ -163,8 +157,10 @@ public class HotelService {
         int nights = (int) ChronoUnit.DAYS.between(LocalDate.parse(arrivalDate), LocalDate.parse(departureDate));
 
         HotelDetailsDTO hotelDetailsDTO = modelMapper.map(data, HotelDetailsDTO.class);
+
         hotelDetailsDTO.setPricePerDay(pricePerDay);
-        hotelDetailsDTO.setTotalPrice(pricePerDay  * nights);
+        hotelDetailsDTO.setTotalPrice(pricePerDay * nights);
+        hotelDetailsDTO.setNights(nights);
         hotelDetailsDTO.setPhotos(photos);
         hotelDetailsDTO.setDescription(description);
         hotelDetailsDTO.setFavouriteCount(hotel.getFavouriteCount());
@@ -172,7 +168,7 @@ public class HotelService {
     }
 
     public HotelData getHotelData(Integer externalId, String checkInDate, String checkOutDate) throws JsonProcessingException {
-        String url = "https://booking-com.p.rapidapi.com/v2/hotels/details?currency=EUR&locale=en-gb&checkout_date=" + checkOutDate + "&checkin_date=" + checkInDate + "&hotel_id=" + externalId;
+        String url = BOOKING_GET_HOTEL_DETAILS_URL + checkOutDate + "&checkin_date=" + checkInDate + "&hotel_id=" + externalId;
 
         String body = getBody(url);
         return objectMapper.readValue(body, new TypeReference<>() {

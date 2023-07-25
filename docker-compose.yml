@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  mysql:
+    image: arm64v8/mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: weather_trip
+    ports:
+      - 3307:3306
+    volumes:
+      - ./data/mysql_data:/var/lib/mysql
+      -
+  redis:
+    image: redis
+    restart: always
+    environment:
+      - REDIS_PASSWORD=admin
+    volumes:
+      - redis_data:/data

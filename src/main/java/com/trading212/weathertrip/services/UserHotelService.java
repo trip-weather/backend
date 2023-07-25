@@ -17,7 +17,9 @@ public class UserHotelService {
     private final HotelRepository hotelRepository;
     private final UserHotelRepository userHotelRepository;
 
-    public UserHotelService(HotelService hotelService, HotelRepository hotelRepository, UserHotelRepository userHotelRepository) {
+    public UserHotelService(HotelService hotelService,
+                            HotelRepository hotelRepository,
+                            UserHotelRepository userHotelRepository) {
         this.hotelService = hotelService;
         this.hotelRepository = hotelRepository;
         this.userHotelRepository = userHotelRepository;

@@ -26,11 +26,11 @@ public enum AmadeusConnect {
                 .and("subType", Locations.AIRPORT));
     }
 
-    public FlightOfferSearch[] flights(String origin,
-                                       String destination,
-                                       String departDate,
-                                       String adults,
-                                       String returnDate) throws ResponseException {
+    public FlightOfferSearch[] getFlightOffer(String origin,
+                                              String destination,
+                                              String departDate,
+                                              String adults,
+                                              String returnDate) throws ResponseException {
 
         return amadeus.shopping.flightOffersSearch.get(
                 Params.with("originLocationCode", origin)
@@ -38,6 +38,14 @@ public enum AmadeusConnect {
                         .and("departureDate", departDate)
                         .and("returnDate", returnDate)
                         .and("adults", adults)
-                        .and("max", 5));
+                        .and("max", 3));
+    }
+
+    public Location findAirport(String city) throws ResponseException {
+        Location[] airports = amadeus.referenceData.locations.get(Params
+                .with("keyword", city)
+                .and("subType", Locations.AIRPORT));
+
+        return airports.length > 0 ? airports[0] : null;
     }
 }
