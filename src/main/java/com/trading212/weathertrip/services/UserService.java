@@ -11,6 +11,7 @@ import com.trading212.weathertrip.domain.dto.UserProfileDTO;
 import com.trading212.weathertrip.domain.dto.hotel.FavouriteHotelDTO;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.UserRepository;
+import com.trading212.weathertrip.services.hotel.UserHotelService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
@@ -21,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -125,8 +125,8 @@ public class UserService {
         User authUser = authService.getAuthenticatedUser();
         List<FavouriteHotelDTO> favouriteHotels =
                 userHotelService
-                        .getUserFavouriteHotels(uuid).stream().map(hotel -> modelMapper.map(hotel, FavouriteHotelDTO.class))
-
+                        .getUserFavouriteHotels(uuid)
+                        .stream().map(hotel -> modelMapper.map(hotel, FavouriteHotelDTO.class))
                         .toList();
 
         return UserProfileDTO.builder()

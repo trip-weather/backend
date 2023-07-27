@@ -19,7 +19,6 @@ public class SearchController {
     private final SearchService searchService;
     private final HotelService hotelService;
 
-
     public SearchController(SearchService vocationService,
                             HotelService hotelService) {
 

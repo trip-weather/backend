@@ -24,7 +24,7 @@ public class FlightController {
     }
 
     @GetMapping("/flights")
-    public FlightOfferDTO[] flights(@RequestBody @Valid FlightValidationDTO validation)
+    public FlightOfferDTO[] flights(@Valid FlightValidationDTO validation)
             throws ResponseException {
         return flightService.findTwoWayTickets(validation);
     }
