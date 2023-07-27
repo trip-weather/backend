@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trading212.weathertrip.domain.dto.weather.ForecastDTO;
 import com.trading212.weathertrip.domain.dto.weather.WrapperForecastDTO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
@@ -32,7 +33,9 @@ public class ForecastService {
 
     public ForecastService(RestTemplate restTemplate,
                            ObjectMapper objectMapper,
-                           WeatherLocationService weatherLocationService, RedisTemplate<String, Object> redisTemplate, HashOperations<String, String, List<ForecastDTO>> hashOperations) {
+                           WeatherLocationService weatherLocationService,
+                           RedisTemplate<String, Object> redisTemplate,
+                           @Qualifier("weatherHashOperations") HashOperations<String, String, List<ForecastDTO>> hashOperations) {
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
         this.weatherLocationService = weatherLocationService;
