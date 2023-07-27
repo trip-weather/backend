@@ -48,6 +48,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/account/change-password").authenticated()
                 .requestMatchers("/api/user/{uuid}/profile", "/api/user/{uuid}/update").authenticated()
                 .requestMatchers("/api/hotel/{id}/like", "/api/hotel/{id}/unlike").authenticated()
+                .requestMatchers("/api/create-verification-session").authenticated()
+                .requestMatchers("/api/order/{uuid}").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic()

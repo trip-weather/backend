@@ -9,6 +9,8 @@ import com.trading212.weathertrip.domain.dto.hotelDetailsData.HotelData;
 import com.trading212.weathertrip.domain.entities.Hotel;
 import com.trading212.weathertrip.repositories.HotelRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,21 +29,26 @@ import static com.trading212.weathertrip.domain.constants.Constants.*;
 
 @Service
 public class HotelService {
+    private static final String HASH_KEY = "hotel_description";
     private final RestTemplate restTemplate;
     private final HotelServiceLocation hotelServiceLocation;
     private final HotelRepository hotelRepository;
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
+    private final HashOperations<String, String, String> hashOperations;
 
     public HotelService(RestTemplate restTemplate,
                         HotelServiceLocation hotelServiceLocation,
-                        HotelRepository hotelRepository, ObjectMapper objectMapper,
-                        ModelMapper modelMapper) {
+                        HotelRepository hotelRepository,
+                        ObjectMapper objectMapper,
+                        ModelMapper modelMapper,
+                        @Qualifier("descriptionHashOperations") HashOperations<String, String, String> hashOperations) {
         this.restTemplate = restTemplate;
         this.hotelServiceLocation = hotelServiceLocation;
         this.hotelRepository = hotelRepository;
         this.objectMapper = objectMapper;
         this.modelMapper = modelMapper;
+        this.hashOperations = hashOperations;
     }
 
     public void save(List<WrapperHotelDTO> hotels) {
@@ -124,8 +131,6 @@ public class HotelService {
     }
 
 
-
-
     public Hotel findByExternalId(Integer externalId) {
         return hotelRepository
                 .findByExternalId(externalId)
@@ -150,6 +155,10 @@ public class HotelService {
 
         double pricePerDay = data.getPrice().getPricePerNight().getValue();
         String description = getHotelDescription(externalId);
+        if (description == null) {
+            saveDescription(externalId);
+            description = getHotelDescription(externalId);
+        }
 
         String arrivalDate = data.getArrivalDate();
         String departureDate = data.getDepartureDate();
@@ -184,7 +193,7 @@ public class HotelService {
         });
     }
 
-    private String getHotelDescription(Integer externalId) throws JsonProcessingException {
+    private String getHotelDescriptionFromAPI(Integer externalId) throws JsonProcessingException {
         String url = BOOKING_HOTEL_DESCRIPTION_URL + externalId;
 
         String body = getBody(url);
@@ -229,5 +238,14 @@ public class HotelService {
         headers.set(RAPID_API_KEY, BOOKING_API_KEY);
         headers.set(RAPID_API_HOST, BOOKING_API_HOST);
         return new HttpEntity<>(headers);
+    }
+
+    public void saveDescription(Integer externalId) throws JsonProcessingException {
+        String description = getHotelDescriptionFromAPI(externalId);
+        hashOperations.put(HASH_KEY, String.valueOf(externalId), description);
+    }
+
+    public String getHotelDescription(Integer externalId) {
+        return hashOperations.get(HASH_KEY, String.valueOf(externalId));
     }
 }

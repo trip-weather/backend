@@ -1,4 +1,4 @@
-package com.trading212.weathertrip.services;
+package com.trading212.weathertrip.services.hotel;
 
 import com.trading212.weathertrip.controllers.errors.InvalidUserException;
 import com.trading212.weathertrip.domain.dto.hotel.FavouriteHotelDTO;
@@ -6,7 +6,6 @@ import com.trading212.weathertrip.domain.entities.Hotel;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.HotelRepository;
 import com.trading212.weathertrip.repositories.UserHotelRepository;
-import com.trading212.weathertrip.services.hotel.HotelService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

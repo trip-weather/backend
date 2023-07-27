@@ -2,7 +2,7 @@ package com.trading212.weathertrip.controllers;
 
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.services.AuthService;
-import com.trading212.weathertrip.services.UserHotelService;
+import com.trading212.weathertrip.services.hotel.UserHotelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

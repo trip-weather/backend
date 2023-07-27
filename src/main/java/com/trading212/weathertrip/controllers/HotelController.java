@@ -19,7 +19,11 @@ public class HotelController {
     public ResponseEntity<HotelDetailsDTO> getHotel(@PathVariable(name = "id") Integer externalId,
                                                     @RequestParam("checkIn") String checkInDate,
                                                     @RequestParam("checkOut") String checkOutDate) throws JsonProcessingException {
-
         return ResponseEntity.ok(hotelService.getHotel(externalId, checkInDate, checkOutDate));
+    }
+
+    @GetMapping("/redis")
+    public void getHotel() throws JsonProcessingException {
+        System.out.println(hotelService.getHotelDescription(16318));
     }
 }

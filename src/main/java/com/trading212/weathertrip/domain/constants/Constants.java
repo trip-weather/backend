@@ -9,6 +9,7 @@ import java.util.List;
  */
 public final class Constants {
 
+    public static final String PROFILE_DOMAIN = "http://localhost:3000";
     public static final int PASSWORD_MIN_LENGTH = 4;
     public static final int PASSWORD_MAX_LENGTH = 50;
     public static final int USERNAME_MIN_SIZE = 4;
