@@ -7,26 +7,22 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Data
 @Builder
-public class Reservation {
-    private int id;
+public class FlightReservation {
+
+    private Integer id;
 
     private String userUuid;
 
-    private String hotelUuid;
-
     private String orderUuid;
 
-    private LocalDateTime reservationDate;
+    private String flightUuid;
 
-    private LocalDate checkIn;
-
-    private LocalDate checkOut;
+    private LocalDate reservationDate;
 
     private BigDecimal price;
 }

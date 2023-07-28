@@ -9,9 +9,12 @@ import lombok.Setter;
 @Builder
 public class Hotel {
     private String uuid;
-    private int externalId;
-    private String name;
-    String provider;
-    private int favouriteCount;
 
+    private int externalId;
+
+    private String name;
+
+    private String provider;
+
+    private int favouriteCount;
 }

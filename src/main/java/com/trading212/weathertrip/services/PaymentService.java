@@ -4,15 +4,12 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
-import com.trading212.weathertrip.domain.entities.Hotel;
-import com.trading212.weathertrip.domain.entities.Order;
-import com.trading212.weathertrip.domain.entities.Reservation;
-import com.trading212.weathertrip.domain.entities.User;
+import com.trading212.weathertrip.domain.entities.*;
 import com.trading212.weathertrip.domain.enums.OrderStatus;
+import com.trading212.weathertrip.domain.enums.OrderType;
 import com.trading212.weathertrip.services.hotel.HotelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,46 +17,47 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.trading212.weathertrip.domain.constants.Constants.DATE_FORMATTER;
-import static com.trading212.weathertrip.domain.constants.Constants.PROFILE_DOMAIN;
+import static com.trading212.weathertrip.domain.constants.APIConstants.STRIPE_API_KEY;
+import static com.trading212.weathertrip.domain.constants.Constants.*;
 
 @Service
 @Slf4j
 public class PaymentService {
 
-    private static final String SUCCESS_PAYMENT_URL = PROFILE_DOMAIN + "/payment-outcome?order_uuid=%s";
-    private static final String CANCEL_PAYMENT_URL = PROFILE_DOMAIN + "/payment-outcome?order_uuid=%s";
-
     private final HotelService hotelService;
     private final OrderService orderService;
     private final AuthService authService;
     private final ReservationService reservationService;
+    private final FlightService flightService;
+    private final FlightReservationService flightReservationService;
 
-    public PaymentService(HotelService hotelService, OrderService orderService, AuthService authService, ReservationService reservationService) {
+
+    public PaymentService(HotelService hotelService, OrderService orderService, AuthService authService, ReservationService reservationService, FlightService flightService, FlightReservationService flightReservationService) {
         this.hotelService = hotelService;
         this.orderService = orderService;
         this.authService = authService;
         this.reservationService = reservationService;
+        this.flightService = flightService;
+        this.flightReservationService = flightReservationService;
     }
 
     public Optional<Session> createPaymentSession(Integer externalId, BigDecimal amount, String checkIn, String checkOut) {
-        Stripe.apiKey = "sk_test_51NXn6mJAyJlvQQVyByoBNiBSMDOhqgRmHlLYnCBO5dYIrjSJSrLpfyUFzstiSSJIErCftbz7yDOdanuN5uPJSu65007LHHmPEk";
+        Stripe.apiKey = STRIPE_API_KEY;
 
         User user = authService.getAuthenticatedUser();
         Hotel hotel = hotelService.findByExternalId(externalId);
 
-        Order order = createInitializedOrder(user, amount);
+        Order order = createInitializedOrder(user, amount, OrderType.HOTEL);
         orderService.save(order);
 
-
-        Map<String, String> sessionMetadata = createSessionMetadata(order, hotel.getUuid(), checkIn, checkOut);
+        Map<String, String> sessionMetadata = createHotelSessionMetadata(order, hotel.getUuid(), checkIn, checkOut);
 
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .putAllMetadata(sessionMetadata)
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl(String.format(SUCCESS_PAYMENT_URL, order.getUuid()))
-                        .setCancelUrl(String.format(CANCEL_PAYMENT_URL, order.getUuid()))
+                        .setSuccessUrl(String.format(SUCCESS_HOTEL_PAYMENT_URL, order.getUuid()))
+                        .setCancelUrl(String.format(CANCEL_HOTEL_PAYMENT_URL, order.getUuid()))
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
                                         .setQuantity(1L)
@@ -69,14 +67,58 @@ public class PaymentService {
                                                         .setUnitAmount(amount.multiply(BigDecimal.valueOf(100)).longValue())
                                                         .setProductData(
                                                                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                                        .setName(order.getCurrency())
-                                                                        .setDescription("Поръчка")
+                                                                        .setName(hotel.getName())
+                                                                        .setDescription("Резервация на хотел")
                                                                         .build())
                                                         .build()
                                         ).build())
 
                         .build();
 
+        return createSession(order, params);
+    }
+
+    public Optional<Session> createFlightPaymentSession(BigDecimal amount,
+                                                        String departAt,
+                                                        String arriveAt,
+                                                        String from,
+                                                        String to) {
+
+        Stripe.apiKey = STRIPE_API_KEY;
+        User user = authService.getAuthenticatedUser();
+        Order order = createInitializedOrder(user, amount, OrderType.FLIGHT);
+        orderService.save(order);
+
+        Map<String, String> sessionMetadata = createFlightSessionMetadata(order, departAt, arriveAt, from, to);
+
+        SessionCreateParams params =
+                SessionCreateParams.builder()
+                        .putAllMetadata(sessionMetadata)
+                        .setMode(SessionCreateParams.Mode.PAYMENT)
+                        .setSuccessUrl(String.format(SUCCESS_FLIGHT_PAYMENT_URL, order.getUuid()))
+                        .setCancelUrl(String.format(CANCEL_FLIGHT_PAYMENT_URL, order.getUuid()))
+                        .addLineItem(
+                                SessionCreateParams.LineItem.builder()
+                                        .setQuantity(1L)
+                                        .setPriceData(
+                                                SessionCreateParams.LineItem.PriceData.builder()
+                                                        .setCurrency(order.getCurrency())
+                                                        .setUnitAmount(amount.multiply(BigDecimal.valueOf(100)).longValue())
+                                                        .setProductData(
+                                                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                        .setName("Самолетни билети")
+                                                                        .setDescription("Поръчка на самолетни билети")
+                                                                        .build())
+                                                        .build()
+                                        ).build())
+
+                        .build();
+
+        return createSession(order, params);
+    }
+
+
+    private Optional<Session> createSession(Order order, SessionCreateParams params) {
         try {
             Session session = Session.create(params);
 
@@ -90,7 +132,23 @@ public class PaymentService {
         }
     }
 
-    public void checkoutSessionCompleted(Session session) {
+    private Map<String, String> createFlightSessionMetadata(Order order,
+                                                            String departAt,
+                                                            String arriveAt,
+                                                            String from,
+                                                            String to) {
+        Map<String, String> sessionMetadata = new HashMap<>();
+        sessionMetadata.put("order_uuid", order.getUuid());
+        sessionMetadata.put("user_uuid", order.getUserUuid());
+        sessionMetadata.put("departAt", departAt);
+        sessionMetadata.put("arriveAt", arriveAt);
+        sessionMetadata.put("from", from);
+        sessionMetadata.put("to", to);
+        sessionMetadata.put("amount", order.getPaymentAmount().toString());
+        return sessionMetadata;
+    }
+
+    public void checkoutHotelSessionCompleted(Session session) {
         Map<String, String> metadata = session.getMetadata();
 
         String orderUuid = metadata.get("order_uuid");
@@ -120,7 +178,8 @@ public class PaymentService {
         reservationService.save(reservation);
     }
 
-    private Map<String, String> createSessionMetadata(Order order, String hotelUuid, String checkIn, String checkOut) {
+
+    private Map<String, String> createHotelSessionMetadata(Order order, String hotelUuid, String checkIn, String checkOut) {
         Map<String, String> sessionMetadata = new HashMap<>();
         sessionMetadata.put("user_uuid", order.getUserUuid());
         sessionMetadata.put("hotel_uuid", hotelUuid);
@@ -131,10 +190,11 @@ public class PaymentService {
         return sessionMetadata;
     }
 
-    private Order createInitializedOrder(User user, BigDecimal amount) {
+    private Order createInitializedOrder(User user, BigDecimal amount, OrderType type) {
         return Order.builder()
                 .userUuid(user.getUuid())
                 .status(OrderStatus.INITIALIZED)
+                .type(type)
                 .ordered(LocalDateTime.now())
                 .paymentAmount(amount)
                 .currency("BGN")
@@ -147,5 +207,44 @@ public class PaymentService {
         Order order = orderService.getOrderByUuid(orderUuid);
         order.setStatus(OrderStatus.CANCELLED);
         orderService.updateStatus(order);
+    }
+
+    public void checkoutFlightSessionCompleted(Session session) {
+        Map<String, String> metadata = session.getMetadata();
+
+        String orderUuid = metadata.get("order_uuid");
+        String userUuid = metadata.get("user_uuid");
+        String departAtString = metadata.get("departAt");
+        String arriveAtString = metadata.get("arriveAt");
+        String from = metadata.get("from");
+        String to = metadata.get("to");
+        String price = metadata.get("amount");
+
+        LocalDate departAt = LocalDate.parse(departAtString, DATE_TIME_FORMATTER);
+        LocalDate arriveAt = LocalDate.parse(arriveAtString, DATE_TIME_FORMATTER);
+
+        Order order = orderService.getOrderByUuid(orderUuid);
+        order.setStatus(OrderStatus.SUCCEEDED);
+        orderService.updateStatus(order);
+
+        Flight flight = Flight.builder()
+                .from(from)
+                .to(to)
+                .provider("Duffel API")
+                .departingAt(departAt)
+                .arrivingAt(arriveAt)
+                .build();
+
+        flightService.save(flight);
+
+        FlightReservation reservation = FlightReservation.builder()
+                .userUuid(userUuid)
+                .flightUuid(flight.getUuid())
+                .orderUuid(orderUuid)
+                .reservationDate(LocalDate.now())
+                .price(new BigDecimal(price))
+                .build();
+
+        flightReservationService.save(reservation);
     }
 }

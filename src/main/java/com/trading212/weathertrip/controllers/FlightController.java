@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class FlightController {
 
-    private final FlightService testFlightService;
+    private final FlightService flightService;
     public FlightController(FlightService testFlightService) {
-        this.testFlightService = testFlightService;
+        this.flightService = testFlightService;
     }
 
 
     @GetMapping("/flights")
     public ResponseEntity<FlightResponseWrapper> searchFlights(FlightValidationDTO validation) throws JsonProcessingException {
-        return ResponseEntity.ok(testFlightService.searchFlights(validation));
+        return ResponseEntity.ok(flightService.searchFlights(validation));
     }
 }
