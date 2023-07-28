@@ -21,6 +21,7 @@ public class APIConstants {
 
     public static final String HOTEL_SEARCH_URL = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=popularity&adults_number=2&checkin_date=";
 
-    public static final String AMADEUS_API_KEY = "drj4GYoPhzW2NgDN08CG0Ye3xe5bAzRE";
-    public static final String AMADEUS_API_SECRET = "2p82GpUGdaaB35Ze";
+    public static final String DUFFEL_API_KEY = "duffel_test_bIraT-Wxyat1qVtr0cAkARxXtVlL515V-SvCC-nAynJ";
+    public static final String DUFFEL_FIND_AIRPORT_BY_CITY_NAME = "https://api.duffel.com/places/suggestions?name=";
+    public static final String DUFFEL_FIND_FLIGHTS_BY_OFFER_URL = "https://api.duffel.com/air/offers?limit=5&sort=total_amount&max_connections=2&offer_request_id=";
 }
