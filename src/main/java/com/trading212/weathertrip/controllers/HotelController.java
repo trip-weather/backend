@@ -24,6 +24,6 @@ public class HotelController {
 
     @GetMapping("/redis")
     public void getHotel() throws JsonProcessingException {
-        System.out.println(hotelService.getHotelDescription(16318));
+//        System.out.println(hotelService.getHotelDescription(16318));
     }
 }
