@@ -19,4 +19,16 @@ public class Flight {
     private LocalDate departingAt;
 
     private LocalDate arrivingAt;
+
+    @Override
+    public String toString() {
+        return "Flight{" +
+                "uuid='" + uuid + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", provider='" + provider + '\'' +
+                ", departingAt=" + departingAt +
+                ", arrivingAt=" + arrivingAt +
+                '}';
+    }
 }

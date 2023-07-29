@@ -1,17 +1,17 @@
 package com.trading212.weathertrip.services.mapper;
 
-import com.trading212.weathertrip.domain.dto.ReservationDTO;
+import com.trading212.weathertrip.domain.dto.HotelReservationDTO;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ReservationDTORowMapper implements RowMapper<ReservationDTO> {
+public class HotelReservationDTORowMapper implements RowMapper<HotelReservationDTO> {
     @Override
-    public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public HotelReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-        return ReservationDTO.builder()
+        return HotelReservationDTO.builder()
                 .checkInDate(rs.getDate("check_in_date").toString())
                 .checkOutDate(rs.getDate("check_out_date").toString())
                 .price(BigDecimal.valueOf(rs.getDouble("price")))

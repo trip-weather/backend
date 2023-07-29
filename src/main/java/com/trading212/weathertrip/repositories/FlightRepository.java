@@ -31,9 +31,6 @@ public class FlightRepository {
                     sql,
                     Statement.RETURN_GENERATED_KEYS);
 
-            System.out.println(flight.getDepartingAt());
-            System.out.println(flight.getDepartingAt().toString());
-
             ps.setString(1, uuid);
             ps.setString(2, flight.getFrom());
             ps.setString(3, flight.getTo());

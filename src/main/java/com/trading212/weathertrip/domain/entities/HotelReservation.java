@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @Data
 @Builder
-public class Reservation {
+public class HotelReservation {
     private int id;
 
     private String userUuid;

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 @AllArgsConstructor
-public class ReservationDTO {
+public class HotelReservationDTO {
     private String checkInDate;
     private String checkOutDate;
     private BigDecimal price;
