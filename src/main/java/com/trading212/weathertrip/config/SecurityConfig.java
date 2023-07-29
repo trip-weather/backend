@@ -48,8 +48,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/account/change-password").authenticated()
                 .requestMatchers("/api/user/{uuid}/profile", "/api/user/{uuid}/update").authenticated()
                 .requestMatchers("/api/hotel/{id}/like", "/api/hotel/{id}/unlike").authenticated()
-                .requestMatchers("/api/create-verification-session").authenticated()
-                .requestMatchers("/api/order/{uuid}").authenticated()
+                .requestMatchers("/api/hotel/create-verification-session").authenticated()
+                .requestMatchers("/api/flight/create-verification-session").authenticated()
+                .requestMatchers("/api/hotel-order/{uuid}, /api/flight-order/{uuid}").authenticated()
+                .requestMatchers("/api/reservations/hotel", "api/reservations/flight-tickets").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic()
@@ -62,5 +64,4 @@ public class SecurityConfig {
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
     }
-
 }

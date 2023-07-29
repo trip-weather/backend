@@ -9,5 +9,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class GrossPrice {
     private String currency;
+
     private double value;
 }

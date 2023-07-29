@@ -1,4 +1,4 @@
-package com.trading212.weathertrip.domain.dto;
+package com.trading212.weathertrip.domain.dto.hotel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 @AllArgsConstructor
-public class ReservationDTO {
+public class HotelReservationDTO {
     private String checkInDate;
     private String checkOutDate;
     private BigDecimal price;
