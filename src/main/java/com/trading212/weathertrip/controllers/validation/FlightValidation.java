@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FlightValidationDTO {
+public class FlightValidation {
     @NotEmpty
     private String origin;
 

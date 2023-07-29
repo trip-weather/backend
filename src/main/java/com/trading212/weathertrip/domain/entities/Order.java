@@ -1,6 +1,7 @@
 package com.trading212.weathertrip.domain.entities;
 
 import com.trading212.weathertrip.domain.enums.OrderStatus;
+import com.trading212.weathertrip.domain.enums.OrderType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Builder;
@@ -15,11 +16,20 @@ import java.time.LocalDateTime;
 @Builder
 public class Order {
     private String uuid;
+
     private String stripeOrder;
-    private LocalDateTime ordered = LocalDateTime.now();
+
+    private LocalDateTime ordered;
+
     private String userUuid;
+
     private BigDecimal paymentAmount;
+
     private String currency;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
 }

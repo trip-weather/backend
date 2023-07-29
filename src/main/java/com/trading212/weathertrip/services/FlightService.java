@@ -10,10 +10,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trading212.weathertrip.controllers.errors.InvalidFlightException;
-import com.trading212.weathertrip.controllers.validation.FlightValidationDTO;
+import com.trading212.weathertrip.controllers.validation.FlightValidation;
 import com.trading212.weathertrip.domain.dto.flight.Airport;
 import com.trading212.weathertrip.domain.dto.flight.AirportWrapperDTO;
 import com.trading212.weathertrip.domain.dto.flight.FlightResponseWrapper;
+import com.trading212.weathertrip.domain.entities.Flight;
+import com.trading212.weathertrip.repositories.FlightRepository;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,13 +30,15 @@ public class FlightService {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private final FlightRepository flightRepository;
 
-    public FlightService(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public FlightService(RestTemplate restTemplate, ObjectMapper objectMapper, FlightRepository flightRepository) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+        this.flightRepository = flightRepository;
     }
 
-    public FlightResponseWrapper searchFlights(FlightValidationDTO validation) throws JsonProcessingException {
+    public FlightResponseWrapper searchFlights(FlightValidation validation) throws JsonProcessingException {
         HttpHeaders headers = getHttpHeaders();
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 
@@ -62,7 +66,7 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
-    private String searchFlightId(FlightValidationDTO validation) throws JsonProcessingException {
+    private String searchFlightId(FlightValidation validation) throws JsonProcessingException {
         List<Airport> originAirports = findAirportsByCity(validation.getOrigin());
         List<Airport> destinationAirports = findAirportsByCity(validation.getDestination());
 
@@ -104,5 +108,9 @@ public class FlightService {
         headers.set("Authorization", "Bearer " + DUFFEL_API_KEY);
         headers.set("Duffel-Version", "v1");
         return headers;
+    }
+
+    public void save(Flight flight) {
+        flightRepository.save(flight);
     }
 }

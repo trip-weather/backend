@@ -7,9 +7,14 @@ import lombok.Setter;
 @Setter
 public class FavouriteHotelDTO {
     private String uuid;
+
     private String name;
+
     private String photoMainUrl;
+
     private int favouriteCount;
+
     private String city;
+
     private int externalId;
 }

@@ -11,15 +11,22 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
 @Data
-public class Reservation {
+@Builder
+public class HotelReservation {
     private int id;
+
     private String userUuid;
+
     private String hotelUuid;
+
     private String orderUuid;
+
     private LocalDateTime reservationDate;
+
     private LocalDate checkIn;
+
     private LocalDate checkOut;
+
     private BigDecimal price;
 }

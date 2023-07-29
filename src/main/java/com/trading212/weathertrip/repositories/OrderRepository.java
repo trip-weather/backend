@@ -4,7 +4,6 @@ import com.trading212.weathertrip.domain.entities.Order;
 import com.trading212.weathertrip.services.mapper.OrderMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -25,7 +24,7 @@ public class OrderRepository {
     }
 
     public Order save(Order order) {
-        String sql = "insert into orders (uuid, user_uuid, ordered, payment_status, amount, currency) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "insert into orders (uuid, user_uuid, ordered, payment_status, amount, currency, order_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String uuid = UUID.randomUUID().toString();
         jdbcTemplate.update(conn -> {
@@ -39,6 +38,7 @@ public class OrderRepository {
             ps.setString(4, order.getStatus().name());
             ps.setBigDecimal(5, order.getPaymentAmount());
             ps.setString(6, order.getCurrency());
+            ps.setString(7, order.getType().name());
 
             return ps;
 

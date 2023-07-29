@@ -29,7 +29,7 @@ public class HotelData {
     private String url;
 
     @JsonProperty("composite_price_breakdown")
-    Price price;
+    private Price price;
 
     @JsonProperty("country_trans")
     private String country;

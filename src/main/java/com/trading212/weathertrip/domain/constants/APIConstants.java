@@ -20,8 +20,9 @@ public class APIConstants {
     public static final String BOOKING_HOTEL_DESCRIPTION_URL = "https://booking-com.p.rapidapi.com/v1/hotels/description?locale=en-gb&hotel_id=";
 
     public static final String HOTEL_SEARCH_URL = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=popularity&adults_number=2&checkin_date=";
-
     public static final String DUFFEL_API_KEY = "duffel_test_bIraT-Wxyat1qVtr0cAkARxXtVlL515V-SvCC-nAynJ";
     public static final String DUFFEL_FIND_AIRPORT_BY_CITY_NAME = "https://api.duffel.com/places/suggestions?name=";
     public static final String DUFFEL_FIND_FLIGHTS_BY_OFFER_URL = "https://api.duffel.com/air/offers?limit=5&sort=total_amount&max_connections=2&offer_request_id=";
+    public static final String STRIPE_API_KEY = "sk_test_51NXn6mJAyJlvQQVyByoBNiBSMDOhqgRmHlLYnCBO5dYIrjSJSrLpfyUFzstiSSJIErCftbz7yDOdanuN5uPJSu65007LHHmPEk";
+    public static String STRIPE_ENDPOINT_SECRET = "whsec_63cf9dbcdff16b197fbc412a8dd45531eba740dd449aac4edadf417c88b56255";
 }
