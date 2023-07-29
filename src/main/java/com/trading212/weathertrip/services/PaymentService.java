@@ -4,10 +4,11 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
-import com.trading212.weathertrip.controllers.validation.FlightPaymentValidationDTO;
+import com.trading212.weathertrip.controllers.validation.FlightPaymentValidation;
 import com.trading212.weathertrip.domain.entities.*;
 import com.trading212.weathertrip.domain.enums.OrderStatus;
 import com.trading212.weathertrip.domain.enums.OrderType;
+import com.trading212.weathertrip.services.hotel.HotelReservationService;
 import com.trading212.weathertrip.services.hotel.HotelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,7 @@ public class PaymentService {
         return createSession(order, params);
     }
 
-    public Optional<Session> createFlightPaymentSession(FlightPaymentValidationDTO validation) {
+    public Optional<Session> createFlightPaymentSession(FlightPaymentValidation validation) {
 
         Stripe.apiKey = STRIPE_API_KEY;
         User user = authService.getAuthenticatedUser();
@@ -131,7 +132,7 @@ public class PaymentService {
     }
 
     private Map<String, String> createFlightSessionMetadata(Order order,
-                                                            FlightPaymentValidationDTO validation) {
+                                                            FlightPaymentValidation validation) {
         Map<String, String> sessionMetadata = new HashMap<>();
         sessionMetadata.put("order_type", order.getType().name());
         sessionMetadata.put("order_uuid", order.getUuid());
@@ -265,6 +266,16 @@ public class PaymentService {
                 .price(new BigDecimal(price))
                 .build();
 
+        FlightReservation reservation2 = FlightReservation.builder()
+                .userUuid(userUuid)
+                .flightUuid(secondFlight.getUuid())
+                .orderUuid(orderUuid)
+                .reservationDate(LocalDate.now())
+                .price(new BigDecimal(price))
+                .build();
+
+        // TODO SaveAll method
+        flightReservationService.save(reservation2);
         flightReservationService.save(reservation);
     }
 

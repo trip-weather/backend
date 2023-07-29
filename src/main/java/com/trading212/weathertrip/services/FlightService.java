@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trading212.weathertrip.controllers.errors.InvalidFlightException;
-import com.trading212.weathertrip.controllers.validation.FlightValidationDTO;
+import com.trading212.weathertrip.controllers.validation.FlightValidation;
 import com.trading212.weathertrip.domain.dto.flight.Airport;
 import com.trading212.weathertrip.domain.dto.flight.AirportWrapperDTO;
 import com.trading212.weathertrip.domain.dto.flight.FlightResponseWrapper;
@@ -38,7 +38,7 @@ public class FlightService {
         this.flightRepository = flightRepository;
     }
 
-    public FlightResponseWrapper searchFlights(FlightValidationDTO validation) throws JsonProcessingException {
+    public FlightResponseWrapper searchFlights(FlightValidation validation) throws JsonProcessingException {
         HttpHeaders headers = getHttpHeaders();
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 
@@ -66,7 +66,7 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
-    private String searchFlightId(FlightValidationDTO validation) throws JsonProcessingException {
+    private String searchFlightId(FlightValidation validation) throws JsonProcessingException {
         List<Airport> originAirports = findAirportsByCity(validation.getOrigin());
         List<Airport> destinationAirports = findAirportsByCity(validation.getDestination());
 

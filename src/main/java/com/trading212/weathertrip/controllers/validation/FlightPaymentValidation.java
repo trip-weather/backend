@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
-public class FlightPaymentValidationDTO {
+public class FlightPaymentValidation {
 
     @NotNull
     private BigDecimal amount;

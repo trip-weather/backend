@@ -1,7 +1,7 @@
 package com.trading212.weathertrip.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.trading212.weathertrip.controllers.validation.FlightValidationDTO;
+import com.trading212.weathertrip.controllers.validation.FlightValidation;
 import com.trading212.weathertrip.domain.dto.flight.FlightResponseWrapper;
 import com.trading212.weathertrip.services.FlightService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class FlightController {
 
 
     @GetMapping("/flights")
-    public ResponseEntity<FlightResponseWrapper> searchFlights(FlightValidationDTO validation) throws JsonProcessingException {
+    public ResponseEntity<FlightResponseWrapper> searchFlights(FlightValidation validation) throws JsonProcessingException {
         return ResponseEntity.ok(flightService.searchFlights(validation));
     }
 }

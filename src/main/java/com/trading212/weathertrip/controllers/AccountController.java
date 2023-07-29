@@ -1,11 +1,11 @@
 package com.trading212.weathertrip.controllers;
 
+import com.trading212.weathertrip.controllers.errors.InvalidValidationKeyException;
 import com.trading212.weathertrip.controllers.errors.UserNotFoundException;
 import com.trading212.weathertrip.controllers.validation.*;
 import com.trading212.weathertrip.controllers.validation.UpdateUserValidation;
 import com.trading212.weathertrip.domain.dto.UserProfileDTO;
 import com.trading212.weathertrip.domain.entities.User;
-import com.trading212.weathertrip.repositories.UserRepository;
 import com.trading212.weathertrip.services.MailService;
 import com.trading212.weathertrip.services.UserService;
 import jakarta.validation.Valid;

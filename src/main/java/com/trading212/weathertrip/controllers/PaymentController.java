@@ -7,7 +7,7 @@ import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.StripeObject;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
-import com.trading212.weathertrip.controllers.validation.FlightPaymentValidationDTO;
+import com.trading212.weathertrip.controllers.validation.FlightPaymentValidation;
 import com.trading212.weathertrip.services.PaymentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class PaymentController {
 
     // TODO add return dates
     @PostMapping("/flight/create-verification-session")
-    public ResponseEntity<String> createFlightPaymentSession(@RequestBody @Valid FlightPaymentValidationDTO validation) {
+    public ResponseEntity<String> createFlightPaymentSession(@RequestBody @Valid FlightPaymentValidation validation) {
 
         Optional<Session> session = paymentService.createFlightPaymentSession(validation);
 

@@ -1,4 +1,4 @@
-package com.trading212.weathertrip.domain.dto;
+package com.trading212.weathertrip.domain.dto.hotel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
