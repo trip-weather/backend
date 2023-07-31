@@ -18,7 +18,7 @@ public class FlightReservationController {
         this.flightReservationService = flightReservationService;
     }
 
-    @GetMapping("/reservations/flight-tickets")
+    @GetMapping("/user/profile/reservations/flight-tickets")
     public ResponseEntity<List<UserReservedFlightsDTO>> getUserReservedHotels(@RequestParam(name = "status") String status) {
         return ResponseEntity.ok(flightReservationService.getUserReservedFlights(status));
     }

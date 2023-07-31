@@ -27,4 +27,7 @@ public final class Constants {
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     public static final List<String> GET_CITIES = List.of("Los Angeles", "Nice", "Florence", "Alanya", "Malaga", "Rio de Janeiro");
+
+    public static final String STATUS_PAST = "past";
+    public static final String STATUS_FUTURE = "future";
 }

@@ -2,6 +2,7 @@ package com.trading212.weathertrip.repositories;
 
 import com.trading212.weathertrip.domain.dto.hotel.HotelReservationDTO;
 import com.trading212.weathertrip.domain.dto.UserReservedHotelsDTO;
+import com.trading212.weathertrip.domain.dto.hotel.HotelReservationDates;
 import com.trading212.weathertrip.domain.entities.HotelReservation;
 import com.trading212.weathertrip.services.mapper.HotelReservationDTORowMapper;
 import com.trading212.weathertrip.services.mapper.UserReservedHotelsRowMapper;
@@ -13,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.trading212.weathertrip.domain.constants.Constants.STATUS_FUTURE;
+import static com.trading212.weathertrip.domain.constants.Constants.STATUS_PAST;
 import static com.trading212.weathertrip.repositories.HotelReservationRepository.Queries.*;
 
 @Repository
@@ -47,15 +50,34 @@ public class HotelReservationRepository {
 
     public List<UserReservedHotelsDTO> getUserReservedHotelsByStatus(String uuid, String status) {
         String sql = "";
-        if (status.equals("past")) {
+        if (STATUS_PAST.equals(status)) {
             sql = GET_USER_RESERVED_PAST_HOTELS;
-        } else if (status.equals("future")) {
+        } else if (STATUS_FUTURE.equals(status)) {
             sql = GET_USER_RESERVED_FUTURE_AND_NOW_HOTELS;
         }
         try {
             return jdbcTemplate.query(sql, reservedHotelsRowMapper, uuid);
         } catch (EmptyResultDataAccessException e) {
             return Collections.emptyList();
+        }
+    }
+
+    public List<Integer> getUserReservedHotelsIds(String uuid) {
+        try {
+            return jdbcTemplate.queryForList(GET_USER_RESERVATIONS_IDS, Integer.class, uuid);
+        } catch (EmptyResultDataAccessException e) {
+            return Collections.emptyList();
+        }
+    }
+
+    public HotelReservationDates getUserReservedHotelDatesByExternalId(Integer externalId, String userUuid) {
+        try {
+            return jdbcTemplate.queryForObject(GET_USER_RESERVED_HOTEL_DATES_BY_EXTERNAL_ID, (rs, rowNum) -> HotelReservationDates.builder()
+                    .checkInDate(String.valueOf(rs.getDate("check_in_date")))
+                    .checkOutDate(String.valueOf(rs.getDate("check_out_date")))
+                    .build(), externalId, userUuid);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
     }
 
@@ -83,5 +105,16 @@ public class HotelReservationRepository {
                 where order_uuid = ?""";
 
         public static final String INSERT_INTO_HOTEL_RESERVATIONS = "insert into hotel_reservations(user_uuid, hotel_uuid, order_uuid, reservation_date, check_in_date, check_out_date, price) VALUES (?,  ?, ?, ?, ?, ?, ?)";
+
+        public static final String GET_USER_RESERVATIONS_IDS = """
+                select h.external_id
+                from hotel_reservations as hs
+                         join hotels h on h.uuid = hs.hotel_uuid
+                where user_uuid = ? and hs.check_out_date > now()""";
+
+        public static final String GET_USER_RESERVED_HOTEL_DATES_BY_EXTERNAL_ID = """
+                select check_in_date, check_out_date from hotel_reservations as hr
+                join hotels h on h.uuid = hr.hotel_uuid
+                where h.external_id = ? and user_uuid = ?""";
     }
 }

@@ -19,7 +19,7 @@ public class UserRoleRepository {
         String query = "select id, authority_name from user_authority where user_uuid = ?";
 
         try {
-          return   Optional.of(jdbcTemplate.queryForObject(query, (rs, rowNum) ->
+            return Optional.of(jdbcTemplate.queryForObject(query, (rs, rowNum) ->
                     new Authority(rs.getLong("id"), rs
                             .getString("authority_name")), uuid));
         } catch (EmptyResultDataAccessException e) {

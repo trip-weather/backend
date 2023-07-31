@@ -78,21 +78,6 @@ public class UserRepository {
             return Optional.empty();
         }
     }
-
-    public Optional<User> findByUsernameDetailedInfo(String username) {
-        String query = """
-                SELECT uuid, username, email, password, firstName, lastName, activated, reset_key, reset_date
-                from users
-                where username = ?
-                """;
-
-        try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(query, detailedRowMapper, username));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-
     public void updatePassword(String uuid, String encryptedPassword) {
         jdbcTemplate.update(UPDATE_PASSWORD, encryptedPassword, uuid);
     }

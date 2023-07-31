@@ -2,6 +2,7 @@ package com.trading212.weathertrip.controllers;
 
 import com.trading212.weathertrip.domain.dto.hotel.HotelReservationDTO;
 import com.trading212.weathertrip.domain.dto.UserReservedHotelsDTO;
+import com.trading212.weathertrip.domain.dto.hotel.HotelReservationDates;
 import com.trading212.weathertrip.services.hotel.HotelReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,18 @@ public class HotelReservationController {
         return ResponseEntity.ok().body(reservation);
     }
 
-    @GetMapping("/reservations/hotel")
+    @GetMapping("/user/profile/reservations/hotel")
     public ResponseEntity<List<UserReservedHotelsDTO>> getUserReservedHotels(@RequestParam(name = "status") String status) {
         return ResponseEntity.ok(hotelReservationService.getUserReservedHotels(status));
+    }
+
+    @GetMapping("/user/reservations/hotel")
+    public ResponseEntity<List<Integer>> getUserReservedHotelIds() {
+        return ResponseEntity.ok(hotelReservationService.getUserReservedHotelsIds());
+    }
+
+    @GetMapping("/user/reservation/hotel/{external_id}")
+    public ResponseEntity<HotelReservationDates> getUserReservedHotel(@PathVariable(name = "external_id") Integer externalId) {
+        return ResponseEntity.ok(hotelReservationService.getUserReservedHotelByExternalId(externalId));
     }
 }
