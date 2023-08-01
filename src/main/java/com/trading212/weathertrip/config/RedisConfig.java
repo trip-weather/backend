@@ -1,5 +1,6 @@
 package com.trading212.weathertrip.config;
 
+import com.trading212.weathertrip.domain.dto.HotelInfo;
 import com.trading212.weathertrip.domain.dto.weather.ForecastDTO;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,6 +62,12 @@ public class RedisConfig {
     @Bean
     @Qualifier("descriptionHashOperations")
     public HashOperations<String, String, String> descriptionHashOperations(RedisTemplate<String, String> redisTemplate) {
+        return redisTemplate.opsForHash();
+    }
+
+    @Bean
+    @Qualifier("hotelInfoHashOperations")
+    public HashOperations<String, String, HotelInfo> hotelInfoHashOperations(RedisTemplate<String, Object> redisTemplate) {
         return redisTemplate.opsForHash();
     }
 }

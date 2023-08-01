@@ -14,6 +14,8 @@ import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.trading212.weathertrip.repositories.OrderRepository.Queries.*;
+
 @Repository
 public class OrderRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -24,12 +26,11 @@ public class OrderRepository {
     }
 
     public Order save(Order order) {
-        String sql = "insert into orders (uuid, user_uuid, ordered, payment_status, amount, currency, order_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String uuid = UUID.randomUUID().toString();
         jdbcTemplate.update(conn -> {
             PreparedStatement ps = conn.prepareStatement(
-                    sql,
+                    INSERT_INTO_ORDERS,
                     Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, uuid);
@@ -51,30 +52,37 @@ public class OrderRepository {
     }
 
     public void updateStripeOrder(Order order) {
-        String sql = "update orders \n" +
-                "set stripe_order = ?\n" +
-                "where uuid = ?";
-
-        jdbcTemplate.update(sql, order.getStripeOrder(), order.getUuid());
+        jdbcTemplate.update(UPDATE_STRIPE_ORDER, order.getStripeOrder(), order.getUuid());
     }
 
     public Optional<Order> findByUuid(String orderUuid) {
-
-        String sql = "select uuid, user_uuid, ordered, payment_status, stripe_order, currency, amount\n" +
-                "from orders\n" +
-                "where uuid = ?";
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, orderMapper, orderUuid));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_ORDER_BY_UUID, orderMapper, orderUuid));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
 
     public void updateStatus(Order order) {
-        String sql = "update orders \n" +
-                "set payment_status = ?\n" +
-                "where uuid = ?";
+        jdbcTemplate.update(UPDATE_ORDER_STATUS, order.getStatus().name(), order.getUuid());
+    }
 
-        jdbcTemplate.update(sql, order.getStatus().name(), order.getUuid());
+    static final class Queries {
+        public static final String UPDATE_ORDER_STATUS = """
+                update orders\s
+                set payment_status = ?
+                where uuid = ?""";
+
+        public static final String FIND_ORDER_BY_UUID = """
+                select uuid, user_uuid, ordered, payment_status, stripe_order, currency, amount
+                from orders
+                where uuid = ?""";
+
+        public static final String UPDATE_STRIPE_ORDER = """
+                update orders\s
+                set stripe_order = ?
+                where uuid = ?""";
+
+        public static final String INSERT_INTO_ORDERS = "insert into orders (uuid, user_uuid, ordered, payment_status, amount, currency, order_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
     }
 }

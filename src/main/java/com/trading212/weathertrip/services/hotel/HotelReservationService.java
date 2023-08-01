@@ -3,6 +3,7 @@ package com.trading212.weathertrip.services.hotel;
 import com.trading212.weathertrip.controllers.errors.InvalidOrderException;
 import com.trading212.weathertrip.domain.dto.hotel.HotelReservationDTO;
 import com.trading212.weathertrip.domain.dto.UserReservedHotelsDTO;
+import com.trading212.weathertrip.domain.dto.hotel.HotelReservationDates;
 import com.trading212.weathertrip.domain.entities.HotelReservation;
 import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.HotelReservationRepository;
@@ -34,5 +35,15 @@ public class HotelReservationService {
     public List<UserReservedHotelsDTO> getUserReservedHotels(String status) {
         User authUser = authService.getAuthenticatedUser();
         return reservationRepository.getUserReservedHotelsByStatus(authUser.getUuid(), status);
+    }
+
+    public List<Integer> getUserReservedHotelsIds() {
+        User authUser = authService.getAuthenticatedUser();
+        return reservationRepository.getUserReservedHotelsIds(authUser.getUuid());
+    }
+
+    public HotelReservationDates getUserReservedHotelByExternalId(Integer externalId) {
+        User authUser = authService.getAuthenticatedUser();
+        return reservationRepository.getUserReservedHotelDatesByExternalId(externalId, authUser.getUuid());
     }
 }

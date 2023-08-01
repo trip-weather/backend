@@ -11,7 +11,7 @@ public class APIConstants {
     public static final String WEATHER_API_HOST = "ai-weather-by-meteosource.p.rapidapi.com";
     public static final String FORECAST_URL = "https://ai-weather-by-meteosource.p.rapidapi.com/daily?units=auto&place_id=";
 
-    public static final String BOOKING_API_KEY = "7f0295da3dmsh370fb1f3f663d73p139374jsn3e720b138d3c";
+    public static final String BOOKING_API_KEY = "f885ca8f1dmsh0da9f6fc361ea5cp17160cjsnfb1ec8a9b8c4";
     public static final String BOOKING_API_HOST = "booking-com.p.rapidapi.com";
 
     public static final String BOOKING_LOCATION_URL = "https://booking-com.p.rapidapi.com/v1/hotels/locations?locale=en-gb&name=";
@@ -19,7 +19,7 @@ public class APIConstants {
     public static final String BOOKING_HOTEL_PHOTOS_URL = "https://booking-com.p.rapidapi.com/v1/hotels/photos?locale=en-gb&hotel_id=";
     public static final String BOOKING_HOTEL_DESCRIPTION_URL = "https://booking-com.p.rapidapi.com/v1/hotels/description?locale=en-gb&hotel_id=";
 
-    public static final String HOTEL_SEARCH_URL = "https://booking-com.p.rapidapi.com/v2/hotels/search?order_by=popularity&adults_number=2&checkin_date=";
+    public static final String HOTEL_SEARCH_URL = "https://booking-com.p.rapidapi.com/v2/hotels/search?dest_type=hotel&order_by=popularity&adults_number=2&checkin_date=";
     public static final String DUFFEL_API_KEY = "duffel_test_bIraT-Wxyat1qVtr0cAkARxXtVlL515V-SvCC-nAynJ";
     public static final String DUFFEL_FIND_AIRPORT_BY_CITY_NAME = "https://api.duffel.com/places/suggestions?name=";
     public static final String DUFFEL_FIND_FLIGHTS_BY_OFFER_URL = "https://api.duffel.com/air/offers?limit=5&sort=total_amount&max_connections=2&offer_request_id=";

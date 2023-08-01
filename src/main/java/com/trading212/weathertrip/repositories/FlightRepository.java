@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.UUID;
 
+import static com.trading212.weathertrip.repositories.FlightRepository.Queries.INSERT_INTO_FLIGHTS;
+
 @Repository
 public class FlightRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -20,15 +22,12 @@ public class FlightRepository {
     }
 
     public Flight save(Flight flight) {
-        String sql = "insert into flights(`uuid`, `from`, `to`, provider, departing_at, arriving_at)\n" +
-                "VALUES (?, ?, ?, ?, ?, ?)";
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String uuid = UUID.randomUUID().toString();
 
         jdbcTemplate.update(conn -> {
             PreparedStatement ps = conn.prepareStatement(
-                    sql,
+                    INSERT_INTO_FLIGHTS,
                     Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, uuid);
@@ -44,5 +43,10 @@ public class FlightRepository {
 
         flight.setUuid(uuid);
         return flight;
+    }
+
+    public static class Queries {
+        public static final String INSERT_INTO_FLIGHTS = "insert into flights(`uuid`, `from`, `to`, provider, departing_at, arriving_at) " +
+                " VALUES (?, ?, ?, ?, ?, ?)";
     }
 }

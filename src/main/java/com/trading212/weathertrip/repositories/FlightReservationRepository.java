@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Collections;
 import java.util.List;
 
+import static com.trading212.weathertrip.domain.constants.Constants.STATUS_FUTURE;
+import static com.trading212.weathertrip.domain.constants.Constants.STATUS_PAST;
 import static com.trading212.weathertrip.repositories.FlightReservationRepository.Queries.*;
 
 @Repository
@@ -25,10 +27,7 @@ public class FlightReservationRepository {
     }
 
     public void save(FlightReservation reservation) {
-        String sql = "insert into flight_reservations(user_uuid, flight_uuid, order_uuid, reservation_date, price)\n" +
-                "values (?, ?, ?, ?, ?)";
-
-        jdbcTemplate.update(sql,
+        jdbcTemplate.update(INSERT_INTO_FLIGHT_RESERVATIONS,
                 reservation.getUserUuid(),
                 reservation.getFlightUuid(),
                 reservation.getOrderUuid(),
@@ -46,9 +45,9 @@ public class FlightReservationRepository {
 
     public List<UserReservedFlightsDTO> getUserReservedFlightsByStatus(String uuid, String status) {
         String sql = "";
-        if (status.equals("past")) {
+        if (STATUS_PAST.equals(status)) {
             sql = GET_USER_RESERVED_PAST_FLIGHT;
-        } else if (status.equals("future")) {
+        } else if (STATUS_FUTURE.equals(status)) {
             sql = GET_USER_RESERVED_FUTURE_AND_NOW_FLIGHTS;
         }
         try {
@@ -80,5 +79,8 @@ public class FlightReservationRepository {
                          join orders o on flight_reservations.order_uuid = o.uuid
                          join flights f on f.uuid = flight_reservations.flight_uuid
                 where order_uuid = ?""";
+
+        public static final String INSERT_INTO_FLIGHT_RESERVATIONS = "insert into flight_reservations(user_uuid, flight_uuid, order_uuid, reservation_date, price) " +
+                " values (?, ?, ?, ?, ?)";
     }
 }
