@@ -20,8 +20,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 import static com.trading212.weathertrip.domain.constants.Constants.*;
@@ -72,7 +74,13 @@ public class HotelService {
             WrapperHotelDTO hotels = objectMapper.readValue(body, new TypeReference<WrapperHotelDTO>() {
             });
 
-            result.add(hotels);
+            List<HotelResultDTO> sorted =
+                    hotels.getResults()
+                            .stream()
+                            .sorted(Comparator.comparingInt(HotelResultDTO::getPropertyClass).reversed())
+                            .collect(Collectors.toList());
+
+            result.add(new WrapperHotelDTO(sorted));
         }
 
 //
@@ -236,7 +244,11 @@ public class HotelService {
         WrapperHotelDTO hotels = objectMapper.readValue(body, new TypeReference<WrapperHotelDTO>() {
         });
 
-        List<HotelResultDTO> limited = hotels.getResults().stream().limit(5).toList();
+        List<HotelResultDTO> limited =
+                hotels.getResults()
+                        .stream()
+                        .sorted(Comparator.comparingInt(HotelResultDTO::getPropertyClass).reversed())
+                        .limit(5).toList();
         result.addAll(limited);
     }
 

@@ -26,6 +26,12 @@ public class HotelResultDTO {
     private HotelPrice priceBreakdown;
 
     @JsonProperty
+    private String latitude;
+
+    @JsonProperty
+    private String longitude;
+
+    @JsonProperty
     private String currency;
 
     @JsonProperty
