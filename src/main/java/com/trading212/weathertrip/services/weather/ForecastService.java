@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trading212.weathertrip.domain.dto.weather.ForecastDTO;
 import com.trading212.weathertrip.domain.dto.weather.WrapperForecastDTO;
+import com.trading212.weathertrip.services.RedisService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,43 +27,34 @@ public class ForecastService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final WeatherLocationService weatherLocationService;
-
     private final RedisTemplate<String, Object> redisTemplate;
     private final HashOperations<String, String, List<ForecastDTO>> hashOperations;
+    private final RedisService redisService;
 
 
     public ForecastService(RestTemplate restTemplate,
                            ObjectMapper objectMapper,
                            WeatherLocationService weatherLocationService,
                            RedisTemplate<String, Object> redisTemplate,
-                           @Qualifier("weatherHashOperations") HashOperations<String, String, List<ForecastDTO>> hashOperations) {
+                           @Qualifier("weatherHashOperations") HashOperations<String, String, List<ForecastDTO>> hashOperations, RedisService redisService) {
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
         this.weatherLocationService = weatherLocationService;
         this.redisTemplate = redisTemplate;
         this.hashOperations = hashOperations;
+        this.redisService = redisService;
     }
 
-    // Redis
-    public void saveForecast(String city) throws JsonProcessingException {
-        List<ForecastDTO> data = getForecast(city);
-        hashOperations.put(HASH_KEY, city, data);
-    }
-
-    public void saveForecastForAllCities() throws JsonProcessingException {
-        for (String city : GET_CITIES) {
-            saveForecast(city);
-        }
-    }
-
-    public List<ForecastDTO> getWeatherData(String city) {
-        return hashOperations.get(HASH_KEY, city);
-    }
-
-    public List<List<ForecastDTO>> getWeatherDataForTargetCities() {
+    public List<List<ForecastDTO>> getWeatherDataForTargetCities() throws JsonProcessingException {
         List<List<ForecastDTO>> result = new ArrayList<>();
         for (String city : GET_CITIES) {
-            result.add(hashOperations.get(HASH_KEY, city));
+            List<ForecastDTO> weatherData = redisService.getWeatherData(city);
+
+            if (weatherData == null) {
+                weatherData = getForecast(city);
+                redisService.saveForecast(city, weatherData);
+            }
+            result.add(weatherData);
         }
         return result;
     }
@@ -78,16 +70,8 @@ public class ForecastService {
     public void updateForecast() throws JsonProcessingException {
         List<String> cities = getAllCities();
         for (String city : cities) {
-            hashOperations.put(HASH_KEY, city, getForecastForPlace(city));
+            hashOperations.put(HASH_KEY, city, getForecast(city));
         }
-    }
-
-    public void deleteAllFromHash() {
-        hashOperations.delete(HASH_KEY, "day");
-    }
-
-    private List<ForecastDTO> getForecastForPlace(String city) throws JsonProcessingException {
-        return getForecast(city);
     }
 
     private List<List<ForecastDTO>> getForecastForAllCities() throws JsonProcessingException {
@@ -100,7 +84,7 @@ public class ForecastService {
         return result;
     }
 
-    private List<ForecastDTO> getForecast(String city) throws JsonProcessingException {
+    public List<ForecastDTO> getForecast(String city) throws JsonProcessingException {
         String place_id = weatherLocationService.findLocation(city);
         String url = FORECAST_URL + place_id;
 
@@ -113,8 +97,18 @@ public class ForecastService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
         String body = response.getBody();
-        WrapperForecastDTO forecasts = objectMapper.readValue(body, new TypeReference<WrapperForecastDTO>() {
+        WrapperForecastDTO forecasts = objectMapper.readValue(body, new TypeReference<>() {
         });
         return forecasts.getDaily().getData();
+    }
+
+    public List<List<ForecastDTO>> saveForecastForTargetCities() throws JsonProcessingException {
+        List<List<ForecastDTO>> result = new ArrayList<>();
+        for (String city : GET_CITIES) {
+            List<ForecastDTO> forecast = getForecast(city);
+            redisService.saveForecast(city, getForecast(city));
+            result.add(forecast);
+        }
+        return result;
     }
 }
