@@ -1,13 +1,14 @@
 package com.trading212.weathertrip.controllers;
 
+import com.trading212.weathertrip.controllers.validation.SearchHotelValidation;
 import com.trading212.weathertrip.domain.dto.hotel.HotelResultDTO;
 import com.trading212.weathertrip.domain.dto.hotel.WrapperHotelDTO;
 import com.trading212.weathertrip.services.SearchService;
 import com.trading212.weathertrip.services.hotel.HotelService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -27,12 +28,9 @@ public class SearchController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<WrapperHotelDTO>> search(@RequestParam(value = "city", required = false) String city,
-                                                        @RequestParam(value = "minTemp", required = false) String minTemp,
-                                                        @RequestParam(value = "maxTemp", required = false) String maxTemp,
-                                                        @RequestParam(value = "period", required = false) Integer period
-    ) throws IOException {
-        List<WrapperHotelDTO> vocations = searchService.search(city, minTemp, maxTemp, period);
+    public ResponseEntity<List<WrapperHotelDTO>> search(@Valid SearchHotelValidation validation)
+            throws IOException {
+        List<WrapperHotelDTO> vocations = searchService.search(validation);
         hotelService.save(vocations);
         return ResponseEntity.ok(vocations);
     }
@@ -45,8 +43,8 @@ public class SearchController {
     }
 
     @GetMapping("/hotels/suggested-by-location")
-    public ResponseEntity<List<WrapperHotelDTO>> locationHotels(@RequestParam(value = "city") String city) throws IOException {
-        List<WrapperHotelDTO> hotelsByLocation = searchService.search(city, null, null, null);
+    public ResponseEntity<List<WrapperHotelDTO>> locationHotels(@Valid SearchHotelValidation validation) throws IOException {
+        List<WrapperHotelDTO> hotelsByLocation = searchService.search(validation);
         hotelService.save(hotelsByLocation);
         return ResponseEntity.ok(hotelsByLocation);
     }

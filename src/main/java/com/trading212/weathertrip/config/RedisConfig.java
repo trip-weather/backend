@@ -1,5 +1,6 @@
 package com.trading212.weathertrip.config;
 
+import com.trading212.weathertrip.domain.dto.GooglePlacesResultDTO;
 import com.trading212.weathertrip.domain.dto.HotelInfo;
 import com.trading212.weathertrip.domain.dto.weather.ForecastDTO;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +15,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class RedisConfig {
@@ -42,17 +44,6 @@ public class RedisConfig {
         return template;
     }
 
-//    @Bean
-//    public RedisTemplate<String, String> descriptionRedisTemplate() {
-//        RedisTemplate<String, String> template = new RedisTemplate<>();
-//        template.setConnectionFactory(jedisConnectionFactory());
-//        template.setKeySerializer(new StringRedisSerializer());
-//        template.setHashKeySerializer(new StringRedisSerializer());
-//        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-//        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-//        return template;
-//    }
-
     @Bean
     @Qualifier("weatherHashOperations")
     public HashOperations<String, String, List<ForecastDTO>> weatherHashOperations(RedisTemplate<String, Object> redisTemplate) {
@@ -60,14 +51,14 @@ public class RedisConfig {
     }
 
     @Bean
-    @Qualifier("descriptionHashOperations")
-    public HashOperations<String, String, String> descriptionHashOperations(RedisTemplate<String, String> redisTemplate) {
+    @Qualifier("hotelInfoHashOperations")
+    public HashOperations<String, String, HotelInfo> hotelInfoHashOperations(RedisTemplate<String, Object> redisTemplate) {
         return redisTemplate.opsForHash();
     }
 
     @Bean
-    @Qualifier("hotelInfoHashOperations")
-    public HashOperations<String, String, HotelInfo> hotelInfoHashOperations(RedisTemplate<String, Object> redisTemplate) {
+    @Qualifier("hotelNearbyPlaces")
+    public HashOperations<String, String, Map<String, List<GooglePlacesResultDTO>>> hotelNearbyHashOperations(RedisTemplate<String, Object> redisTemplate) {
         return redisTemplate.opsForHash();
     }
 }

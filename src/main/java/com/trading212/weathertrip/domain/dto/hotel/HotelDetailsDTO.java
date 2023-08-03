@@ -1,11 +1,13 @@
 package com.trading212.weathertrip.domain.dto.hotel;
 
+import com.trading212.weathertrip.domain.dto.GooglePlacesResultDTO;
 import com.trading212.weathertrip.domain.dto.hotelDetailsData.Properties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -50,4 +52,7 @@ public class HotelDetailsDTO {
     private String url;
 
     private int nights;
+
+    private Map<String, List<GooglePlacesResultDTO>> nearby;
+
 }

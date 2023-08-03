@@ -17,4 +17,5 @@ public class HotelInfo {
     private List<HotelPhoto> photos;
 
     private String description;
+
 }

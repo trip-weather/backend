@@ -6,6 +6,8 @@ import com.trading212.weathertrip.services.hotel.HotelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class HotelController {
@@ -16,14 +18,10 @@ public class HotelController {
     }
 
     @GetMapping("/hotel/{id}")
-    public ResponseEntity<HotelDetailsDTO> getHotel(@PathVariable(name = "id") Integer externalId,
+    public ResponseEntity<HotelDetailsDTO> getHotel(@PathVariable("id") Integer externalId,
                                                     @RequestParam("checkIn") String checkInDate,
-                                                    @RequestParam("checkOut") String checkOutDate) throws JsonProcessingException {
-        return ResponseEntity.ok(hotelService.getHotel(externalId, checkInDate, checkOutDate));
-    }
-
-    @GetMapping("/redis")
-    public void getHotel() throws JsonProcessingException {
-//        System.out.println(hotelService.getHotelDescription(16318));
+                                                    @RequestParam("checkOut") String checkOutDate,
+                                                    @RequestParam(value = "nearby", required = false) List<String> nearby) throws JsonProcessingException {
+        return ResponseEntity.ok(hotelService.getHotel(externalId, checkInDate, checkOutDate, nearby));
     }
 }

@@ -1,10 +1,10 @@
 package com.trading212.weathertrip.services;
 
 import com.trading212.weathertrip.controllers.errors.WeatherException;
+import com.trading212.weathertrip.controllers.validation.SearchHotelValidation;
 import com.trading212.weathertrip.domain.constants.Constants;
 import com.trading212.weathertrip.domain.dto.hotel.WrapperHotelDTO;
 import com.trading212.weathertrip.domain.dto.weather.ForecastDTO;
-import com.trading212.weathertrip.domain.dto.weather.ForecastDataDTO;
 import com.trading212.weathertrip.services.hotel.HotelService;
 import com.trading212.weathertrip.services.weather.ForecastService;
 import org.springframework.stereotype.Service;
@@ -22,30 +22,37 @@ import static com.trading212.weathertrip.domain.constants.Constants.*;
 public class SearchService {
     private final HotelService hotelService;
     private final ForecastService forecastService;
+    private final RedisService redisService;
 
-    public SearchService(HotelService hotelService, ForecastService forecastService) {
+    public SearchService(HotelService hotelService, ForecastService forecastService, RedisService redisService) {
         this.hotelService = hotelService;
         this.forecastService = forecastService;
+        this.redisService = redisService;
     }
 
-    public List<WrapperHotelDTO> search(String city,
-                                        String minTemp,
-                                        String maxTemp,
-                                        Integer period) throws IOException {
+    public List<WrapperHotelDTO> search(SearchHotelValidation validation) throws IOException {
+
+        String city = validation.getCity();
+        String minTemp = validation.getMinTemp();
+        String maxTemp = validation.getMaxTemp();
+        Integer period = validation.getPeriod();
+        List<String> filters = validation.getFilters();
+
         Map<LocalDate, LocalDate> periods = new LinkedHashMap<>();
 
         //CITY
         if (city != null) {
             //CITY + TEMP OR CITY + TEMP + PERIOD
             if (minTemp != null && maxTemp != null) {
-                List<ForecastDTO> weatherData = forecastService.getWeatherData(city);
+                List<ForecastDTO> weatherData = redisService.getWeatherData(city);
                 if (weatherData == null) {
-                    forecastService.saveForecast(city);
-                    weatherData = forecastService.getWeatherData(city);
+                    List<ForecastDTO> forecast = forecastService.getForecast(city);
+                    redisService.saveForecast(city, forecast);
+                    weatherData = redisService.getWeatherData(city);
                 }
                 periods = getAppropriatePeriodsForCity(weatherData, minTemp, maxTemp, period);
-                //CITY + PERIOD OR CITY
 
+                //CITY + PERIOD OR CITY
             } else {
                 periods.put(DEFAULT_START_DATE, period != null ? LocalDate.now().plusDays(period) : DEFAULT_END_DATE);
             }
@@ -53,7 +60,7 @@ public class SearchService {
             if (periods.isEmpty()) {
                 throw new WeatherException("No options found for the minimum and maximum temperature you submitted.");
             }
-            return hotelService.findAvailableHotels(periods, city);
+            return hotelService.findAvailableHotels(periods, city, filters);
         }
 
         // PERIOD
@@ -64,6 +71,9 @@ public class SearchService {
 
         // PERIOD + TEMP OR ONLY TEMP
         List<List<ForecastDTO>> weatherDataForTargetCities = forecastService.getWeatherDataForTargetCities();
+        if (weatherDataForTargetCities.isEmpty()) {
+            weatherDataForTargetCities = forecastService.saveForecastForTargetCities();
+        }
         periods = getAppropriatePeriodsForAllCities(weatherDataForTargetCities, minTemp, maxTemp, period);
 
         if (periods.isEmpty()) {
@@ -130,7 +140,6 @@ public class SearchService {
                     break;
                 }
             }
-
             if (validPeriod) {
                 String startDateString = forecast.get(i).getDay();
                 String endDateString = forecast.get(i + period - 1).getDay();
