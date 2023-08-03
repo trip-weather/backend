@@ -18,10 +18,10 @@ public class HotelController {
     }
 
     @GetMapping("/hotel/{id}")
-    public ResponseEntity<HotelDetailsDTO> getHotel(@PathVariable(name = "id") Integer externalId,
+    public ResponseEntity<HotelDetailsDTO> getHotel(@PathVariable("id") Integer externalId,
                                                     @RequestParam("checkIn") String checkInDate,
                                                     @RequestParam("checkOut") String checkOutDate,
-                                                    @RequestParam("nearby") List<String> nearby) throws JsonProcessingException {
+                                                    @RequestParam(value = "nearby", required = false) List<String> nearby) throws JsonProcessingException {
         return ResponseEntity.ok(hotelService.getHotel(externalId, checkInDate, checkOutDate, nearby));
     }
 }

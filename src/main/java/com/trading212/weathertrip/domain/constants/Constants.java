@@ -28,6 +28,10 @@ public final class Constants {
 
     public static final List<String> GET_CITIES = List.of("Los Angeles", "Nice", "Florence", "Alanya", "Malaga", "Rio de Janeiro");
 
+    public static final List<String> GET_SUMMER_CITIES =
+            List.of("Dubai","Cairo", "Sousse", "Nice", "Florence", "Djerba", "Malaga", "Rio de Janeiro", "Agadir, Marocco", "Phuket, Thailand", "Barcelona", "Athens");
+    public static final List<String> GET_WINTER_CITIES =
+            List.of("Queenstown, New Zealand", "Christchurch, New Zealand", "Ushuaia, Argentina, ", "Bariloche, Argentina", "Punta Arenas, Chile", "Puerto Natales, Chile");
     public static final String STATUS_PAST = "past";
     public static final String STATUS_FUTURE = "future";
 }

@@ -1,6 +1,5 @@
 package com.trading212.weathertrip.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.trading212.weathertrip.domain.dto.GooglePlacesResultDTO;
 import com.trading212.weathertrip.domain.dto.HotelInfo;
 import com.trading212.weathertrip.domain.dto.weather.ForecastDTO;
@@ -60,11 +59,15 @@ public class RedisService {
         hotelInfoHashOperations.put(HOTEL_INFORMATION_HASH_KEY, String.valueOf(externalId), information);
     }
 
+    public Map<String, HotelInfo> getAllHotelInfoSaved() {
+        return hotelInfoHashOperations.entries(HOTEL_NEARBY_HASH_KEY);
+    }
+
     public HotelInfo getHotelInformation(Integer externalId) {
         return hotelInfoHashOperations.get(HOTEL_INFORMATION_HASH_KEY, String.valueOf(externalId));
     }
 
-    public void saveForecast(String city, List<ForecastDTO> forecast){
+    public void saveForecast(String city, List<ForecastDTO> forecast) {
         forecastHashOperations.put(FORECAST_HASH_KEY, city, forecast);
     }
 

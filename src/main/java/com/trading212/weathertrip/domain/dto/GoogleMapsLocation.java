@@ -14,5 +14,4 @@ public class GoogleMapsLocation {
 
     @JsonProperty("lng")
     private String longitude;
-
 }
