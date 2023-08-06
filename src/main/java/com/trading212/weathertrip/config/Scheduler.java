@@ -19,14 +19,15 @@ public class Scheduler {
         this.hotelService = hotelService;
     }
 
-    @Scheduled(cron = "0 0 12 * * *")
+    @Scheduled(cron = "0 51 10 * * *")
     public void updateForecast() throws JsonProcessingException {
         forecastService.updateForecast();
         log.info("Forecast updated!");
     }
-    @Scheduled(cron = "0 0 12 ? * MON")
+    @Scheduled(cron = "0 0 12 * * TUE")
     public void updateHotelData() throws JsonProcessingException {
       hotelService.updateHotelData();
         log.info("Hotel date updated!!");
     }
+    // TODO add sceduler for nearby
 }

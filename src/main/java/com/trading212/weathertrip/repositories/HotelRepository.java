@@ -3,7 +3,7 @@ package com.trading212.weathertrip.repositories;
 import com.trading212.weathertrip.domain.dto.hotel.HotelResultDTO;
 import com.trading212.weathertrip.domain.dto.hotel.WrapperHotelDTO;
 import com.trading212.weathertrip.domain.entities.Hotel;
-import com.trading212.weathertrip.services.mapper.HotelMapper;
+import com.trading212.weathertrip.services.mapper.HotelRowMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,7 +20,7 @@ import static com.trading212.weathertrip.repositories.HotelRepository.Queries.*;
 @Repository
 public class HotelRepository {
     private final JdbcTemplate jdbcTemplate;
-    private final HotelMapper hotelMapper = new HotelMapper();
+    private final HotelRowMapper hotelMapper = new HotelRowMapper();
 
     public HotelRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -79,16 +79,19 @@ public class HotelRepository {
 
         public static final String SAVE = "insert ignore into hotels(uuid, external_id, name, provider, photo_main_url, city)" +
                 " VALUES (?, ?, ?, ?, ?, ?)";
-        public static final String UPDATE_FAVOURITE_COUNT = "UPDATE hotels \n" +
-                "SET favourite_count = ?\n" +
-                "WHERE uuid = ?";
+        public static final String UPDATE_FAVOURITE_COUNT = """
+                UPDATE hotels\s
+                SET favourite_count = ?
+                WHERE uuid = ?""";
 
-        public static final String FIND_BY_UUID = "select uuid, external_id, name, provider, favourite_count \n" +
-                "from hotels\n" +
-                "where uuid = ?";
+        public static final String FIND_BY_UUID = """
+                select uuid, external_id, name, provider, favourite_count\s
+                from hotels
+                where uuid = ?""";
 
-        public static final String FIND_BY_EXTERNAL_ID = "select uuid, external_id, name, provider,favourite_count  \n" +
-                "from hotels\n" +
-                "where external_id = ?";
+        public static final String FIND_BY_EXTERNAL_ID = """
+                select uuid, external_id, name, provider,favourite_count \s
+                from hotels
+                where external_id = ?""";
     }
 }

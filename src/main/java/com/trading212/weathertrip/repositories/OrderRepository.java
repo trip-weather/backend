@@ -1,7 +1,7 @@
 package com.trading212.weathertrip.repositories;
 
 import com.trading212.weathertrip.domain.entities.Order;
-import com.trading212.weathertrip.services.mapper.OrderMapper;
+import com.trading212.weathertrip.services.mapper.OrderRowMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -19,7 +19,7 @@ import static com.trading212.weathertrip.repositories.OrderRepository.Queries.*;
 @Repository
 public class OrderRepository {
     private final JdbcTemplate jdbcTemplate;
-    private final OrderMapper orderMapper = new OrderMapper();
+    private final OrderRowMapper orderMapper = new OrderRowMapper();
 
     public OrderRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

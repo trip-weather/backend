@@ -21,4 +21,6 @@ public class FlightValidation {
 
     @NotEmpty
     private String returnDate;
+
+    private String travelClass;
 }

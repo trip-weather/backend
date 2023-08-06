@@ -29,7 +29,7 @@ public class HotelReservationService {
     public HotelReservationDTO getReservationByOrderUuid(String uuid) {
         return reservationRepository.
                 getReservationByOrderUuid(uuid).
-                orElseThrow(() -> new InvalidOrderException("Reservation not found!"));
+                orElseThrow(() -> new InvalidOrderException("Reservation not found for order " + uuid));
     }
 
     public List<UserReservedHotelsDTO> getUserReservedHotels(String status) {
@@ -42,7 +42,8 @@ public class HotelReservationService {
         return reservationRepository.getUserReservedHotelsIds(authUser.getUuid());
     }
 
-    public HotelReservationDates getUserReservedHotelByExternalId(Integer externalId) {
+
+    public HotelReservationDates getUserReservedHotelDatesByExternalId(Integer externalId) {
         User authUser = authService.getAuthenticatedUser();
         return reservationRepository.getUserReservedHotelDatesByExternalId(externalId, authUser.getUuid());
     }

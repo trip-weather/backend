@@ -33,24 +33,7 @@ public class FlightPaymentValidation {
 
         @NotNull
         private String arrivingAt;
-
-        @Override
-        public String toString() {
-            return "Flight{" +
-                    "departingAt='" + departingAt + '\'' +
-                    ", arrivingAt='" + arrivingAt + '\'' +
-                    '}';
-        }
     }
 
-    @Override
-    public String toString() {
-        return "FlightPaymentValidationDTO{" +
-                "amount=" + amount +
-                ", outgoingFlight=" + outgoingFlight +
-                ", incomingFlight=" + incomingFlight +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                '}';
-    }
+
 }

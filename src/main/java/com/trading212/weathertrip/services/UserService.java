@@ -17,6 +17,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -69,6 +70,7 @@ public class UserService {
         return userRepository.save(userToSave);
     }
 
+    @Transactional
     public void changePassword(ChangePasswordValidation validation) {
         User authUser = authService.getAuthenticatedUser();
         if (authUser != null) {
@@ -83,8 +85,8 @@ public class UserService {
         }
     }
 
+    @Transactional
     public Optional<User> requestForResetPassword(String email) {
-
         return userRepository.findByEmail(email).map(userToUpdate -> {
             userToUpdate.setResetDate(LocalDateTime.now());
 
@@ -92,12 +94,13 @@ public class UserService {
             userToUpdate.setResetKey(key);
 
             userRepository.updateResetKeyAndDate(userToUpdate);
-
             return userToUpdate;
         });
     }
 
+    @Transactional
     public Optional<User> completePasswordReset(String newPassword, String key) {
+        log.info("Reset user password for reset key {}", key);
         return userRepository.findByResetKey(key)
                 .filter(user -> user.getResetDate().isAfter(LocalDateTime.now().minus(1, ChronoUnit.DAYS)))
                 .map(user -> {
@@ -110,7 +113,10 @@ public class UserService {
                 });
     }
 
+
+    @Transactional
     public Optional<User> activateAccount(String key) {
+        log.info("Activating user for activation key {}", key);
         return userRepository.findByActivationKey(key).map(user -> {
             user.setActivated(true);
             user.setActivationKey(null);
@@ -121,7 +127,6 @@ public class UserService {
     }
 
     public UserProfileDTO getUserProfileByUuid(String uuid) {
-        // TODO add reserved hotels and flights
         User authUser = authService.getAuthenticatedUser();
         List<FavouriteHotelDTO> favouriteHotels =
                 userHotelService
@@ -142,5 +147,6 @@ public class UserService {
 
     public void update(UpdateUserValidation validation, String uuid) {
         userRepository.updateUser(validation, uuid);
+        log.info("Updated user with uuid : {}", uuid);
     }
 }

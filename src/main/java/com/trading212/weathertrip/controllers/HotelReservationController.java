@@ -36,7 +36,7 @@ public class HotelReservationController {
     }
 
     @GetMapping("/user/reservation/hotel/{external_id}")
-    public ResponseEntity<HotelReservationDates> getUserReservedHotel(@PathVariable(name = "external_id") Integer externalId) {
-        return ResponseEntity.ok(hotelReservationService.getUserReservedHotelByExternalId(externalId));
+    public ResponseEntity<HotelReservationDates> getUserReservedHotelDates(@PathVariable(name = "external_id") Integer externalId) {
+        return ResponseEntity.ok(hotelReservationService.getUserReservedHotelDatesByExternalId(externalId));
     }
 }

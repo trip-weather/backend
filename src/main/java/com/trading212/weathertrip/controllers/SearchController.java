@@ -37,7 +37,7 @@ public class SearchController {
 
     @GetMapping("/hotels/suggested")
     public ResponseEntity<List<HotelResultDTO>> suggestedHotels() throws IOException {
-        List<HotelResultDTO> suggestedHotels = hotelService.getHotels();
+        List<HotelResultDTO> suggestedHotels = hotelService.getSuggestedHotels();
         hotelService.save(List.of(new WrapperHotelDTO(suggestedHotels)));
         return ResponseEntity.ok(suggestedHotels);
     }
@@ -47,10 +47,5 @@ public class SearchController {
         List<WrapperHotelDTO> hotelsByLocation = searchService.search(validation);
         hotelService.save(hotelsByLocation);
         return ResponseEntity.ok(hotelsByLocation);
-    }
-
-    @GetMapping("/get/cities")
-    public ResponseEntity<List<String>> getCities() {
-        return ResponseEntity.ok(searchService.getCities());
     }
 }
