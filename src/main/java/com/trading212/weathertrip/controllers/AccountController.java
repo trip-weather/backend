@@ -35,7 +35,7 @@ public class AccountController {
         User registerUser = userService.registerUser(validation);
         log.info("Register new user ");
 
-//        mailService.sendActivationEmail(registerUser);
+        mailService.sendActivationEmail(registerUser);
     }
 
     @GetMapping("/account/activate")

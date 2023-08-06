@@ -12,6 +12,7 @@ import com.trading212.weathertrip.domain.entities.Hotel;
 import com.trading212.weathertrip.repositories.HotelRepository;
 import com.trading212.weathertrip.services.GoogleMapsService;
 import com.trading212.weathertrip.services.RedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,13 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 import static com.trading212.weathertrip.domain.constants.Constants.*;
 
 @Service
+@Slf4j
 public class HotelService {
 
     private final RestTemplate restTemplate;
@@ -56,75 +59,48 @@ public class HotelService {
         hotelRepository.save(hotels);
     }
 
+    public HotelDetailsDTO getHotel(Integer externalId, String checkInDate, String checkOutDate, List<String> nearby) throws JsonProcessingException {
+
+        Hotel hotel = findByExternalId(externalId);
+        HotelInfo information = getHotelInfo(externalId, checkInDate, checkOutDate);
+
+        double pricePerDay = information.getData().getPrice().getPricePerNight().getValue();
+        int nights = calculateNights(information.getData().getArrivalDate(), information.getData().getDepartureDate());
+
+        HotelDetailsDTO hotelDetailsDTO = modelMapper.map(information.getData(), HotelDetailsDTO.class);
+        hotelDetailsDTO.setPricePerDay(pricePerDay);
+        hotelDetailsDTO.setTotalPrice(pricePerDay * nights);
+        hotelDetailsDTO.setNights(nights);
+        hotelDetailsDTO.setPhotos(information.getPhotos());
+        hotelDetailsDTO.setDescription(information.getDescription());
+        hotelDetailsDTO.setFavouriteCount(hotel.getFavouriteCount());
+
+        if (nearby != null) {
+            HashMap<String, List<GooglePlacesResultDTO>> hotelNearbyPlaces = new HashMap<>();
+            for (String type : nearby) {
+                List<GooglePlacesResultDTO> placesByType = redisService.getNearbyPlacesByType(externalId, type);
+                hotelNearbyPlaces.put(type, placesByType);
+            }
+            hotelDetailsDTO.setNearby(hotelNearbyPlaces);
+        }
+        return hotelDetailsDTO;
+    }
+
     public List<WrapperHotelDTO> findAvailableHotels(Map<LocalDate, LocalDate> periods, String cityName, List<String> nearby) throws IOException {
+        log.info("Request for searching hotels!");
         String destinationId = getDestinationId(cityName);
-        HttpEntity<Object> requestEntity = getRequestEntity();
 
         List<HotelResultDTO> allHotels = new ArrayList<>();
-
         for (Map.Entry<LocalDate, LocalDate> period : periods.entrySet()) {
-            String url = HOTEL_SEARCH_URL
-                    + period.getKey() + "&filter_by_currency=EUR" +
-                    "&dest_id=" + destinationId + "&locale=en-gb" +
-                    "&checkout_date=" + period.getValue() +
-                    "&units=metric&room_number=1&dest_type=city";
-
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-
-            String body = response.getBody();
-            WrapperHotelDTO wrapperHotelDTO = objectMapper.readValue(body, new TypeReference<>() {
-            });
-
-            List<HotelResultDTO> hotels = wrapperHotelDTO.getResults().stream().limit(12).toList();
-            allHotels.addAll(hotels);
-
-//            List<HotelResultDTO> sorted =
-//                    hotels.getResults()
-//                            .stream()
-//                            .sorted(Comparator.comparingInt(HotelResultDTO::getPropertyClass).reversed())
-//                            .collect(Collectors.toList());
-
-            if (nearby != null && !nearby.isEmpty()) {
-                List<HotelResultDTO> filtered = new ArrayList<>();
-                for (HotelResultDTO hotel : hotels) {
-                    HashMap<String, Integer> nearbyFilters = new HashMap<>();
-                    for (String keyword : nearby) {
-                        List<GooglePlacesResultDTO> nearbyPlacesByType = redisService.getNearbyPlacesByType(hotel.getId(), keyword);
-
-                        if (nearbyPlacesByType == null) {
-                            List<GooglePlacesResultDTO> amenities =
-                                    googleMapsService
-                                            .findNearest(hotel.getLatitude(), hotel.getLongitude(), keyword)
-                                            .stream()
-                                            .limit(10)
-                                            .toList();
-
-                            redisService.saveNearby(hotel.getId(), keyword, amenities);
-                            nearbyPlacesByType = amenities;
-                        }
-
-                        if (!nearbyPlacesByType.isEmpty()) {
-//
-                            nearbyFilters.put(keyword, nearbyPlacesByType.size());
-                            hotel.setNearbyFilters(nearbyFilters);
-                            filtered.add(hotel);
-                        }
-                    }
-                    allHotels.removeAll(hotels);
-                    allHotels.addAll(filtered);
-                }
-            }
+            List<HotelResultDTO> hotelsForPeriod = searchHotelsForPeriod(destinationId, period.getKey(), period.getValue());
+            allHotels.addAll(hotelsForPeriod);
         }
 
-//
-//// Only for testing
-//        String jsonFilePath = "src/main/resources/hotel_in_sofia_data.json";
-//        String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
-//
-//        List<WrapperHotelDTO> hotels = objectMapper.readValue(jsonContent, new TypeReference<List<WrapperHotelDTO>>() {
-//        });
+        if (nearby != null && !nearby.isEmpty()) {
+            applyNearbyFilters(allHotels, nearby);
+        }
 
-        return Collections.singletonList(new WrapperHotelDTO(allHotels));
+        return List.of(new WrapperHotelDTO(allHotels));
     }
 
     public List<HotelResultDTO> findAvailableHotelsForAllCities(Map<LocalDate, LocalDate> periods) throws JsonProcessingException {
@@ -146,7 +122,7 @@ public class HotelService {
         return result;
     }
 
-    public List<HotelResultDTO> getHotels() throws IOException {
+    public List<HotelResultDTO> getSuggestedHotels() throws IOException {
         ArrayList<String> destinationIds = getDestinationIds();
         HttpEntity<Object> requestEntity = getRequestEntity();
 
@@ -159,15 +135,6 @@ public class HotelService {
                     + DEFAULT_END_DATE + "&units=metric&room_number=1&dest_type=city";
             getResponse(requestEntity, result, url);
         }
-
-//         only for testing
-//        String jsonFilePath = "src/main/resources/hotel_in_sofia_data.json";
-//        String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
-//
-//        List<WrapperHotelDTO> hotels = objectMapper.readValue(jsonContent, new TypeReference<List<WrapperHotelDTO>>() {
-//        });
-//        return hotels.get(0).getResults();
-
         return result;
     }
 
@@ -178,19 +145,47 @@ public class HotelService {
                 .orElseThrow(() -> new HotelNotFoundException("Hotel with externalId " + externalId + " not found"));
     }
 
-    public HotelDetailsDTO getHotel(Integer externalId, String checkInDate, String checkOutDate, List<String> nearby) throws JsonProcessingException {
+    public void updateHotelData() throws JsonProcessingException {
+        Map<String, HotelInfo> oldHotelInfo = redisService.getAllHotelInfoSaved();
 
-        Hotel hotel = hotelRepository
-                .findByExternalId(externalId)
-                .orElseThrow(() -> new HotelNotFoundException("Hotel with externalId " + externalId + " not found"));
+        for (Map.Entry<String, HotelInfo> entry : oldHotelInfo.entrySet()) {
+            int id = Integer.parseInt(entry.getKey());
 
+            List<HotelPhoto> photos = getHotelPhotos(id);
+            HotelData data = getHotelData(id, entry.getValue().getData().getArrivalDate(),
+                    entry.getValue().getData().getDepartureDate());
+            String description = getHotelDescription(id);
 
+            HotelInfo information = HotelInfo.builder()
+                    .data(data)
+                    .photos(photos)
+                    .description(description)
+                    .build();
+
+            redisService.saveHotelInfo(id, information);
+        }
+    }
+
+    private HotelData getHotelData(Integer externalId, String checkInDate, String checkOutDate) throws JsonProcessingException {
+        String url = BOOKING_GET_HOTEL_DETAILS_URL + checkOutDate +
+                "&checkin_date=" + checkInDate +
+                "&hotel_id=" + externalId;
+
+        String body = getBody(url);
+        return objectMapper.readValue(body, new TypeReference<>() {
+        });
+    }
+
+    private int calculateNights(String arrivalDate, String departureDate) {
+        return (int) ChronoUnit.DAYS.between(LocalDate.parse(arrivalDate), LocalDate.parse(departureDate));
+    }
+
+    private HotelInfo getHotelInfo(Integer externalId, String checkInDate, String checkOutDate) throws JsonProcessingException {
         HotelInfo information = redisService.getHotelInformation(externalId);
-
         if (information == null) {
             List<HotelPhoto> photos = getHotelPhotos(externalId).stream().limit(15).toList();
             HotelData data = getHotelData(externalId, checkInDate, checkOutDate);
-            String description = getHotelDescriptionFromAPI(externalId);
+            String description = getHotelDescription(externalId);
 
             information = HotelInfo.builder()
                     .data(data)
@@ -200,58 +195,66 @@ public class HotelService {
 
             redisService.saveHotelInfo(externalId, information);
         }
-
-        double pricePerDay = information.getData().getPrice().getPricePerNight().getValue();
-        String arrivalDate = information.getData().getArrivalDate();
-        String departureDate = information.getData().getDepartureDate();
-
-        int nights = (int) ChronoUnit.DAYS.between(LocalDate.parse(arrivalDate), LocalDate.parse(departureDate));
-
-        HotelDetailsDTO hotelDetailsDTO = modelMapper.map(information.getData(), HotelDetailsDTO.class);
-
-        hotelDetailsDTO.setPricePerDay(pricePerDay);
-        hotelDetailsDTO.setTotalPrice(pricePerDay * nights);
-        hotelDetailsDTO.setNights(nights);
-        hotelDetailsDTO.setPhotos(information.getPhotos());
-        hotelDetailsDTO.setDescription(information.getDescription());
-        hotelDetailsDTO.setFavouriteCount(hotel.getFavouriteCount());
-
-        if (nearby != null) {
-            HashMap<String, List<GooglePlacesResultDTO>> hotelNearbyPlaces = new HashMap<>();
-            for (String type : nearby) {
-                List<GooglePlacesResultDTO> placesByType = redisService.getNearbyPlacesByType(externalId, type);
-                hotelNearbyPlaces.put(type, placesByType);
-            }
-            hotelDetailsDTO.setNearby(hotelNearbyPlaces);
-        }
-        return hotelDetailsDTO;
-    }
-
-
-    public HotelData getHotelData(Integer externalId, String checkInDate, String checkOutDate) throws JsonProcessingException {
-        String url = BOOKING_GET_HOTEL_DETAILS_URL + checkOutDate + "&checkin_date=" + checkInDate + "&hotel_id=" + externalId;
-
-        String body = getBody(url);
-        return objectMapper.readValue(body, new TypeReference<>() {
-        });
-
+        return information;
     }
 
     private List<HotelPhoto> getHotelPhotos(Integer externalId) throws JsonProcessingException {
         String url = BOOKING_HOTEL_PHOTOS_URL + externalId;
 
         String body = getBody(url);
-        return objectMapper.readValue(body, new TypeReference<>() {});
+        return objectMapper.readValue(body, new TypeReference<>() {
+        });
     }
 
-    private String getHotelDescriptionFromAPI(Integer externalId) throws JsonProcessingException {
+    private String getHotelDescription(Integer externalId) throws JsonProcessingException {
         String url = BOOKING_HOTEL_DESCRIPTION_URL + externalId;
 
         String body = getBody(url);
-        HotelDescription hotelDescription = objectMapper.readValue(body, new TypeReference<>() {
-        });
+        HotelDescription hotelDescription = objectMapper.readValue(body, new TypeReference<>() {});
 
         return hotelDescription.getDescription();
+    }
+
+    private void applyNearbyFilters(List<HotelResultDTO> hotels, List<String> nearby) {
+        for (HotelResultDTO hotel : hotels) {
+            HashMap<String, Integer> nearbyFilters = new HashMap<>();
+            for (String keyword : nearby) {
+                List<GooglePlacesResultDTO> nearbyPlacesByType =
+                        redisService.getNearbyPlacesByType(hotel.getId(), keyword);
+
+                if (nearbyPlacesByType == null) {
+                    List<GooglePlacesResultDTO> amenities = googleMapsService
+                            .findNearest(hotel.getLatitude(), hotel.getLongitude(), keyword)
+                            .stream()
+                            .limit(10)
+                            .collect(Collectors.toList());
+
+                    redisService.saveNearby(hotel.getId(), keyword, amenities);
+                    nearbyPlacesByType = amenities;
+                }
+
+                if (!nearbyPlacesByType.isEmpty()) {
+                    nearbyFilters.put(keyword, nearbyPlacesByType.size());
+                    hotel.setNearbyFilters(nearbyFilters);
+                }
+            }
+        }
+    }
+
+    private List<HotelResultDTO> searchHotelsForPeriod(String destinationId, LocalDate checkInDate, LocalDate checkOutDate) throws JsonProcessingException {
+        String url = HOTEL_SEARCH_URL
+                + checkInDate + "&filter_by_currency=EUR" +
+                "&dest_id=" + destinationId + "&locale=en-gb" +
+                "&checkout_date=" + checkOutDate +
+                "&units=metric&room_number=1&dest_type=city";
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, getRequestEntity(), String.class);
+        WrapperHotelDTO wrapperHotelDTO = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+        return wrapperHotelDTO
+                .getResults().stream()
+                .sorted(Comparator.comparing(HotelResultDTO::getPropertyClass))
+                .limit(12)
+                .collect(Collectors.toList());
     }
 
     private String getBody(String url) {
@@ -295,24 +298,4 @@ public class HotelService {
         return new HttpEntity<>(headers);
     }
 
-    public void updateHotelData() throws JsonProcessingException {
-        Map<String, HotelInfo> oldHotelInfo = redisService.getAllHotelInfoSaved();
-
-        for (Map.Entry<String, HotelInfo> entry : oldHotelInfo.entrySet()) {
-            int id = Integer.parseInt(entry.getKey());
-
-            List<HotelPhoto> photos = getHotelPhotos(id);
-            HotelData data = getHotelData(id, entry.getValue().getData().getArrivalDate(),
-                    entry.getValue().getData().getDepartureDate());
-            String description = getHotelDescriptionFromAPI(id);
-
-            HotelInfo information = HotelInfo.builder()
-                    .data(data)
-                    .photos(photos)
-                    .description(description)
-                    .build();
-
-            redisService.saveHotelInfo(id, information);
-        }
-    }
 }

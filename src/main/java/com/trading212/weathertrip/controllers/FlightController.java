@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class FlightController {
 
     private final FlightService flightService;
+
     public FlightController(FlightService testFlightService) {
         this.flightService = testFlightService;
     }
-
 
     @GetMapping("/flights")
     public ResponseEntity<FlightResponseWrapper> searchFlights(FlightValidation validation) throws JsonProcessingException {

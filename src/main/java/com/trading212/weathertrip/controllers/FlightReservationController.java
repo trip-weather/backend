@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class FlightReservationController {
-
     private final FlightReservationService flightReservationService;
 
     public FlightReservationController(FlightReservationService flightReservationService) {

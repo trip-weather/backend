@@ -84,6 +84,7 @@ public class PaymentService {
     public Optional<Session> createFlightPaymentSession(FlightPaymentValidation validation) {
 
         Stripe.apiKey = STRIPE_API_KEY;
+
         User user = authService.getAuthenticatedUser();
         Order order = createInitializedOrder(user, validation.getAmount(), OrderType.FLIGHT);
         orderService.save(order);
@@ -94,7 +95,7 @@ public class PaymentService {
                 SessionCreateParams.builder()
                         .putAllMetadata(sessionMetadata)
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl(String.format(SUCCESS_FLIGHT_PAYMENT_URL, order.getUuid()))
+                        .setSuccessUrl(String.format(SUCCESS_FLIGHT_PAYMENT_URL))
                         .setCancelUrl(String.format(CANCEL_FLIGHT_PAYMENT_URL, order.getUuid()))
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
@@ -201,7 +202,7 @@ public class PaymentService {
                 .type(type)
                 .ordered(LocalDateTime.now())
                 .paymentAmount(amount)
-                .currency("BGN")
+                .currency("EUR")
                 .build();
     }
 
@@ -282,9 +283,9 @@ public class PaymentService {
     public void checkOrderType(Session session) {
         String orderType = session.getMetadata().get("order_type");
 
-        if (orderType.equals("HOTEL")) {
+        if (orderType.equals(OrderType.HOTEL.name())) {
             checkoutHotelSessionCompleted(session);
-        } else if (orderType.equals("FLIGHT")) {
+        } else if (orderType.equals(OrderType.FLIGHT.name())) {
             checkoutFlightSessionCompleted(session);
         }
     }

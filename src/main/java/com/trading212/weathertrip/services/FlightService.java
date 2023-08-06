@@ -16,6 +16,7 @@ import com.trading212.weathertrip.domain.dto.flight.AirportWrapperDTO;
 import com.trading212.weathertrip.domain.dto.flight.FlightResponseWrapper;
 import com.trading212.weathertrip.domain.entities.Flight;
 import com.trading212.weathertrip.repositories.FlightRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -26,19 +27,24 @@ import java.util.stream.Collectors;
 import static com.trading212.weathertrip.domain.constants.APIConstants.*;
 
 @Service
+@Slf4j
 public class FlightService {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final FlightRepository flightRepository;
 
-    public FlightService(RestTemplate restTemplate, ObjectMapper objectMapper, FlightRepository flightRepository) {
+    public FlightService(RestTemplate restTemplate,
+                         ObjectMapper objectMapper,
+                         FlightRepository flightRepository) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
         this.flightRepository = flightRepository;
     }
 
     public FlightResponseWrapper searchFlights(FlightValidation validation) throws JsonProcessingException {
+        log.info("Request for searching flights!");
+
         HttpHeaders headers = getHttpHeaders();
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 
@@ -49,21 +55,6 @@ public class FlightService {
 
         return objectMapper.readValue(response.getBody(), new TypeReference<>() {
         });
-    }
-
-    private List<Airport> findAirportsByCity(String city) throws JsonProcessingException {
-        HttpHeaders headers = getHttpHeaders();
-        HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
-
-        String url = DUFFEL_FIND_AIRPORT_BY_CITY_NAME + city;
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-
-        AirportWrapperDTO airports = objectMapper.readValue(response.getBody(), new TypeReference<>() {
-        });
-
-        return airports.getAirports().stream()
-                .filter(airport -> airport.getType().equals("airport") && airport.getCityName().equals(city))
-                .collect(Collectors.toList());
     }
 
     private String searchFlightId(FlightValidation validation) throws JsonProcessingException {
@@ -87,19 +78,46 @@ public class FlightService {
 
         Passenger passenger = new Passenger();
         passenger.setType(PassengerType.adult);
-        passenger.setGivenName("Test");
+        passenger.setGivenName("User");
         passenger.setFamilyName("User");
 
         OfferRequest request = new OfferRequest();
-        request.setMaxConnections(0);
-        request.setCabinClass(CabinClass.economy);
+        request.setMaxConnections(2);
+//        request.setCabinClass(CabinClass.economy);
         request.setSlices(List.of(outboundSlice, inboundSlice));
         request.setPassengers(List.of(passenger, passenger));
+
+        if ("economy".equals(validation.getTravelClass())) {
+            request.setCabinClass(CabinClass.economy);
+        } else if ("premium_economy".equals(validation.getTravelClass())) {
+            request.setCabinClass(CabinClass.premium_economy);
+        } else if ("business".equals(validation.getTravelClass())) {
+            request.setCabinClass(CabinClass.business);
+        } else if ("first-class".equals(validation.getTravelClass())) {
+            request.setCabinClass(CabinClass.first);
+        } else {
+            throw new InvalidFlightException("Invalid travel class: " + validation.getTravelClass());
+        }
 
         DuffelApiClient client = new DuffelApiClient(DUFFEL_API_KEY);
         OfferResponse offerResponse = client.offerRequestService.post(request);
 
         return offerResponse.getId();
+    }
+
+    private List<Airport> findAirportsByCity(String city) throws JsonProcessingException {
+        HttpHeaders headers = getHttpHeaders();
+        HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+
+        String url = DUFFEL_FIND_AIRPORT_BY_CITY_NAME + city;
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+
+        AirportWrapperDTO airports = objectMapper.readValue(response.getBody(), new TypeReference<>() {
+        });
+
+        return airports.getAirports().stream()
+                .filter(airport -> airport.getType().equals("airport") && airport.getCityName().equals(city))
+                .collect(Collectors.toList());
     }
 
     private static HttpHeaders getHttpHeaders() {

@@ -12,7 +12,7 @@ public final class Constants {
     public static final String PROFILE_DOMAIN = "http://localhost:3000";
     public static final String SUCCESS_HOTEL_PAYMENT_URL = PROFILE_DOMAIN + "/payment-outcome?order_uuid=%s";
     public static final String CANCEL_HOTEL_PAYMENT_URL = PROFILE_DOMAIN + "/payment-outcome?order_uuid=%s";
-    public static final String SUCCESS_FLIGHT_PAYMENT_URL = PROFILE_DOMAIN + "/payment-outcome-flight?order_uuid=%s";
+    public static final String SUCCESS_FLIGHT_PAYMENT_URL = PROFILE_DOMAIN + "/profile";
     public static final String CANCEL_FLIGHT_PAYMENT_URL = PROFILE_DOMAIN + "/payment-outcome?order-flight_uuid=%s";
     public static final int PASSWORD_MIN_LENGTH = 4;
     public static final int PASSWORD_MAX_LENGTH = 50;

@@ -48,7 +48,6 @@ public class PaymentController {
     }
 
 
-    // TODO add return dates
     @PostMapping("/flight/create-verification-session")
     public ResponseEntity<String> createFlightPaymentSession(@RequestBody @Valid FlightPaymentValidation validation) {
 
@@ -94,38 +93,4 @@ public class PaymentController {
             log.info("Invalid signature");
         }
     }
-
-//    @PostMapping("/payment-flight")
-//    public void flightPayment(@RequestBody String payload,
-//                              @RequestHeader("Stripe-Signature") String signHeader) {
-//
-//        String endpointSecret = "whsec_63cf9dbcdff16b197fbc412a8dd45531eba740dd449aac4edadf417c88b56255";
-//
-//        try {
-//            Event event = Webhook.constructEvent(payload, signHeader, endpointSecret);
-//            System.out.println(event);
-//            EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
-//            StripeObject stripeObject = dataObjectDeserializer.getObject().orElseThrow();
-//
-//            switch (event.getType()) {
-//                case "checkout.session.completed": {
-//                    Session session = (Session) stripeObject;
-//                    paymentService.checkoutFlightSessionCompleted(session);
-//                    break;
-//                }
-//                case "checkout.session.expired": {
-//                    Session session = (Session) stripeObject;
-//                    paymentService.checkoutSessionExpired(session);
-//                    break;
-//                }
-//                default:
-//                    System.out.println("Unhandled event type: " + event.getType());
-//            }
-//
-//        } catch (JsonSyntaxException e) { // Invalid payload
-//            log.info("Invalid payload");
-//        } catch (SignatureVerificationException e) { // Invalid signature
-//            log.info("Invalid signature");
-//        }
-//    }
 }

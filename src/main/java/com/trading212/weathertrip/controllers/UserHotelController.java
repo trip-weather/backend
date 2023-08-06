@@ -21,7 +21,6 @@ public class UserHotelController {
         this.userHotelService = userHotelService;
     }
 
-
     @PostMapping("/hotel/{id}/like")
     public ResponseEntity addHotelToFavourite(@PathVariable("id") Integer externalId) {
         User user = authService.getAuthenticatedUser();
@@ -44,7 +43,7 @@ public class UserHotelController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @GetMapping("/user/favouriteHotels")
+    @GetMapping("/user/favourite-hotels")
     public ResponseEntity<List<Integer>> getUserFavouriteHotels() {
 
         User user = authService.getAuthenticatedUser();

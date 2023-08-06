@@ -44,13 +44,13 @@ public class SearchService {
         if (city != null) {
             //CITY + TEMP OR CITY + TEMP + PERIOD
             if (minTemp != null && maxTemp != null) {
-                List<ForecastDTO> weatherData = redisService.getWeatherData(city);
-                if (weatherData == null) {
-                    List<ForecastDTO> forecast = forecastService.getForecast(city);
+                List<ForecastDTO> forecastData = redisService.getForecastForCity(city);
+                if (forecastData == null) {
+                    List<ForecastDTO> forecast = forecastService.getForecastforCityFromApi(city);
                     redisService.saveForecast(city, forecast);
-                    weatherData = redisService.getWeatherData(city);
+                    forecastData = forecast;
                 }
-                periods = getAppropriatePeriodsForCity(weatherData, minTemp, maxTemp, period);
+                periods = getAppropriatePeriodsForCity(forecastData, minTemp, maxTemp, period);
 
                 //CITY + PERIOD OR CITY
             } else {
@@ -70,11 +70,11 @@ public class SearchService {
         }
 
         // PERIOD + TEMP OR ONLY TEMP
-        List<List<ForecastDTO>> weatherDataForTargetCities = forecastService.getWeatherDataForTargetCities();
-        if (weatherDataForTargetCities.isEmpty()) {
-            weatherDataForTargetCities = forecastService.saveForecastForTargetCities();
+        List<List<ForecastDTO>> forecastDataForTargetCities = forecastService.getForecastForTargetCities();
+        if (forecastDataForTargetCities.isEmpty()) {
+            forecastDataForTargetCities = forecastService.saveForecastForTargetCities();
         }
-        periods = getAppropriatePeriodsForAllCities(weatherDataForTargetCities, minTemp, maxTemp, period);
+        periods = getAppropriatePeriodsForAllCities(forecastDataForTargetCities, minTemp, maxTemp, period);
 
         if (periods.isEmpty()) {
             throw new WeatherException("No options found for the minimum and maximum temperature you submitted.");
@@ -114,16 +114,11 @@ public class SearchService {
         return result;
     }
 
-    public List<String> getCities() {
-        return Constants.GET_CITIES;
-    }
-
     private void getPeriod(String minTemp,
                            String maxTemp,
                            LinkedHashMap<LocalDate, LocalDate> result,
                            Integer period,
                            List<ForecastDTO> forecast) {
-
 
         double minTempValue = Double.parseDouble(minTemp);
         double maxTempValue = Double.parseDouble(maxTemp);

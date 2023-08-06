@@ -33,8 +33,7 @@ public class HotelServiceLocation {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
         String body = response.getBody();
-        HotelLocationDTO[] locations = objectMapper.readValue(body, new TypeReference<HotelLocationDTO[]>() {
-        });
+        HotelLocationDTO[] locations = objectMapper.readValue(body, new TypeReference<>() {});
         return locations[0].getDestId();
     }
 }

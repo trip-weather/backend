@@ -7,6 +7,7 @@ import com.trading212.weathertrip.domain.entities.User;
 import com.trading212.weathertrip.repositories.HotelRepository;
 import com.trading212.weathertrip.repositories.UserHotelRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class UserHotelService {
         this.userHotelRepository = userHotelRepository;
     }
 
+    @Transactional
     public boolean addToFavourite(Integer externalId, User user) {
         Hotel hotel = hotelService.findByExternalId(externalId);
         hotel.setFavouriteCount(hotel.getFavouriteCount() + 1);
@@ -39,6 +41,7 @@ public class UserHotelService {
         return hotelUpdateSuccess && userHotelSaveSuccess;
     }
 
+//    @Transactional
     public boolean removeFromFavourite(Integer externalId, User user) {
         Hotel hotel = hotelService.findByExternalId(externalId);
         hotel.setFavouriteCount(hotel.getFavouriteCount() - 1);

@@ -56,5 +56,4 @@ public class HotelData {
 
     @JsonProperty("departure_date")
     private String departureDate;
-
 }
