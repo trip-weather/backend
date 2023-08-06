@@ -1,6 +1,5 @@
 package com.trading212.weathertrip.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.trading212.weathertrip.domain.dto.GooglePlacesResultDTO;
 import com.trading212.weathertrip.domain.dto.HotelInfo;
 import com.trading212.weathertrip.domain.dto.weather.ForecastDTO;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.List;
@@ -87,12 +85,5 @@ public class RedisService {
 
     public void updateForecast(String city, List<ForecastDTO> forecast) {
         forecastHashOperations.put(FORECAST_HASH_KEY, city, forecast);
-    }
-
-
-    public void deleteAllFromHotelInfoHash() {
-        try (Jedis jedis = new Jedis("localhost", 6379)) {
-            jedis.del(HOTEL_INFORMATION_HASH_KEY);
-        }
     }
 }

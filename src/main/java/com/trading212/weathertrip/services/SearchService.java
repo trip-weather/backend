@@ -48,7 +48,6 @@ public class SearchService {
                 if (forecastData == null) {
                     List<ForecastDTO> forecast = forecastService.getForecastforCityFromApi(city);
                     redisService.saveForecast(city, forecast);
-//                    forecastData = redisService.getForecastForCity(city);
                     forecastData = forecast;
                 }
                 periods = getAppropriatePeriodsForCity(forecastData, minTemp, maxTemp, period);

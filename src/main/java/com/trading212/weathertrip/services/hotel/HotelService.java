@@ -219,7 +219,8 @@ public class HotelService {
         for (HotelResultDTO hotel : hotels) {
             HashMap<String, Integer> nearbyFilters = new HashMap<>();
             for (String keyword : nearby) {
-                List<GooglePlacesResultDTO> nearbyPlacesByType = redisService.getNearbyPlacesByType(hotel.getId(), keyword);
+                List<GooglePlacesResultDTO> nearbyPlacesByType =
+                        redisService.getNearbyPlacesByType(hotel.getId(), keyword);
 
                 if (nearbyPlacesByType == null) {
                     List<GooglePlacesResultDTO> amenities = googleMapsService
@@ -296,4 +297,5 @@ public class HotelService {
         headers.set(RAPID_API_HOST, BOOKING_API_HOST);
         return new HttpEntity<>(headers);
     }
+
 }
