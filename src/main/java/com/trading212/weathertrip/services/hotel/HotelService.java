@@ -107,7 +107,9 @@ public class HotelService {
         List<HotelResultDTO> result = new ArrayList<>();
         HttpEntity<Object> requestEntity = getRequestEntity();
 
-        for (String cityName : GET_CITIES) {
+        Collections.shuffle(GET_CITIES);
+
+        for (String cityName : GET_CITIES.subList(0, 3)) {
             String destinationId = getDestinationId(cityName);
 
             for (Map.Entry<LocalDate, LocalDate> period : periods.entrySet()) {
@@ -247,6 +249,9 @@ public class HotelService {
                 "&dest_id=" + destinationId + "&locale=en-gb" +
                 "&checkout_date=" + checkOutDate +
                 "&units=metric&room_number=1&dest_type=city";
+
+        System.out.println(checkInDate);
+        System.out.println(checkOutDate);
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, getRequestEntity(), String.class);
         WrapperHotelDTO wrapperHotelDTO = objectMapper.readValue(response.getBody(), new TypeReference<>() {});

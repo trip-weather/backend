@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.trading212.weathertrip.domain.constants.Constants.*;
 
@@ -98,7 +95,15 @@ public class SearchService {
         for (List<ForecastDTO> forecast : forecasts) {
             getPeriod(minTemp, maxTemp, result, period, forecast);
         }
-        return result;
+
+        List<Map.Entry<LocalDate, LocalDate>> entryList = new ArrayList<>(result.entrySet());
+        Collections.shuffle(entryList);
+
+        LinkedHashMap<LocalDate, LocalDate> data = new LinkedHashMap<>();
+        for (Map.Entry<LocalDate, LocalDate> entry : entryList.subList(0, 5)) {
+            data.put(entry.getKey(), entry.getValue());
+        }
+        return data;
     }
 
     private Map<LocalDate, LocalDate> getAppropriatePeriodsForCity(List<ForecastDTO> forecast,

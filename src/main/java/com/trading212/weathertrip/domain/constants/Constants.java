@@ -2,6 +2,7 @@ package com.trading212.weathertrip.domain.constants;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public final class Constants {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-    public static final List<String> GET_CITIES = List.of("Los Angeles", "Nice", "Florence", "Alanya", "Malaga", "Rio de Janeiro");
+    public static final List<String> GET_CITIES = Arrays.asList("Los Angeles", "Nice", "Florence", "Alanya", "Malaga", "Rio de Janeiro");
 
     public static final List<String> GET_SUMMER_CITIES =
             List.of("Dubai","Cairo", "Sousse", "Nice", "Florence", "Djerba", "Malaga", "Rio de Janeiro", "Agadir, Marocco", "Phuket, Thailand", "Barcelona", "Athens");
