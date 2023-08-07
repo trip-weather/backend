@@ -25,8 +25,14 @@ public class Scheduler {
         log.info("Forecast updated!");
     }
     @Scheduled(cron = "0 0 0 * * TUE")
+    public void updateDescriptionAndPhotos() throws JsonProcessingException {
+      hotelService.updateDescriptionAndPhotos();
+        log.info("Hotel description and photos updated!!");
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
     public void updateHotelData() throws JsonProcessingException {
-      hotelService.updateHotelData();
-        log.info("Hotel date updated!!");
+        hotelService.updateHotelData();
+        log.info("Hotel data updated!!");
     }
 }
