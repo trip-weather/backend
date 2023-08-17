@@ -13,6 +13,8 @@ and make it an enjoyable experience.
 
 - **Weather Forecast**: Find cities with your desired weather conditions using our temperature API interface.
 
+- **Google Maps**: Explores nearby points of interest to enhance your travel experience.
+
 - **Hotel Catalog**: Explore an extensive collection of hotels in various cities. Apply filters to discover the ideal hotel that meets your requirements.
 
 - **Flight Tickets**: Let us take care of your transportation needs by utilizing the flight ticket API.
@@ -27,7 +29,6 @@ I am dedicated to continuously improving WeatherTrip. Future enhancements includ
 - Interactive Maps: Visualize destinations and hotel locations on an interactive map.
 - Reviews and Recommendations: Incorporate user reviews and recommendations for hotels and destinations.
 
-
 ## Technologies Used
 
 - **Spring Boot**: Backend framework for building robust and scalable applications.
@@ -37,5 +38,30 @@ I am dedicated to continuously improving WeatherTrip. Future enhancements includ
 - **Redis**: In-memory data store for caching and improving application performance.
 
 ### Home Page
+![Home Page](images/home-page.png)
+At WeatherTrip, we understand that the perfect vacation starts with the perfect destination. 
 
+![Top Travel Destinations](images/top-travel-destinations.png)
+The section where you can directly select your city.
 
+### Search Page
+![Search Bar](images/search-page.png)
+- Begin by selecting your favorite city from our extensive list of options.
+- Next, indicate your desired temperature range. Whether you're longing for a tropical paradise or a cozy winter escape,
+our platform will filter hotels that match your climate preferences.
+- But that's not all - you can filter your hotel options based on the season you wish to travel in.
+
+![Search Bar](images/filters.png)
+- The addition of the "More Filters button" feature introduces a new level of customization, allowing users to
+align their hotel selection with their interests and activities.
+
+![Found Hotels](images/found-hotels.png)
+
+### Hotel Detailed Page
+![Hotel Details](images/hotel-detailed-page.png)
+- Delve into a wealth of information about your selected hotel. 
+![Hotel Details](images/nearby.png)
+![Successful Reservation](images/successful-reservation.png)
+- Furthermore, users don't have to worry about transportation as the application can 
+take care of that by suggesting the flight tickets.
+![Flights](images/flights.png)
